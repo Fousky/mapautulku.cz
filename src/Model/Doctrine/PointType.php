@@ -1,4 +1,4 @@
-<?php declare(strict_types=1);
+<?php declare(strict_types = 1);
 
 namespace App\Model\Doctrine;
 
@@ -20,8 +20,12 @@ class PointType extends Type
         return 'POINT';
     }
 
-    public function convertToPHPValue($value, AbstractPlatform $platform): Point
+    public function convertToPHPValue($value, AbstractPlatform $platform): ?Point
     {
+        if (empty($value)) {
+            return null;
+        }
+
         [$longitude, $latitude] = sscanf($value, 'POINT(%f %f)');
 
         return new Point($latitude, $longitude);

@@ -1,0 +1,27 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+
+    <section class="my-4">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-8 offset-md-2">
+                    <div class="alert alert-success">
+                        <h1>Děkujeme!</h1>
+                        <p class="lead">
+                            Vážíme si vaší pomoci.
+                        </p>
+                        <p>
+                            Pokud jste nám zanechali kontakt, dáme vám vědět, až organizaci zveřejníme.
+                        </p>
+                    </div>
+
+                    <a href="{{ path('_app_organization_add') }}" class="btn btn-primary">
+                        Přidat další &rarr;
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+{% endblock %}

@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>Admin / MapaUtulku.cz</title>
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport" />
+    <link rel="stylesheet" href="{{ asset('bundles/sonatacore/vendor/bootstrap/dist/css/bootstrap.min.css') }}" />
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.5.0/css/font-awesome.min.css" />
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css" />
+    <link rel="stylesheet" href="{{ asset('bundles/sonataadmin/vendor/admin-lte/dist/css/AdminLTE.min.css') }}" />
+    <link rel="stylesheet" href="{{ asset('bundles/sonataadmin/vendor/iCheck/skins/square/blue.css') }}" />
+    <!--[if lt IE 9]>
+    <script src="//oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <script src="//oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+<body class="hold-transition login-page">
+<div class="login-box">
+    <div class="login-logo">
+        <span>
+            Mapa<strong>Útulků</strong>.cz
+        </span>
+    </div>
+
+    <div class="login-box-body">
+        {% if error %}
+            <div class="alert alert-danger">
+                {{ error.messageKey|trans(error.messageData, 'security') }}
+            </div>
+        {% endif %}
+
+        <form action="{{ path('_admin_login_check') }}" method="post" enctype="application/x-www-form-urlencoded">
+            <div class="form-group has-feedback">
+                <label for="_username">E-mail:</label>
+                <input id="_username" type="text" name="_username" class="form-control" value="{{ last_username }}" autocomplete="off" />
+                <span class="glyphicon glyphicon-user form-control-feedback"></span>
+            </div>
+            <div class="form-group has-feedback">
+                <label for="_password">Heslo:</label>
+                <input type="password" name="_password" id="_password" class="form-control" autocomplete="off" />
+                <span class="glyphicon glyphicon-lock form-control-feedback"></span>
+            </div>
+            <div class="checkbox icheck">
+                <label>
+                    <input type="checkbox" name="_remember_me" />
+                    Pamatuj si mě
+                </label>
+            </div>
+
+            <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}" />
+
+            <button type="submit" class="btn btn-primary btn-block btn-flat">Přihlásit</button>
+        </form>
+    </div>
+</div>
+
+<script src="{{ asset('bundles/sonataadmin/vendor/jquery/dist/jquery.min.js') }}"></script>
+<script src="{{ asset('bundles/sonatacore/vendor/bootstrap/dist/js/bootstrap.min.js') }}"></script>
+<script src="{{ asset('bundles/sonataadmin/vendor/iCheck/icheck.min.js') }}"></script>
+<script>
+    $(function () {
+        $('input').iCheck({
+            checkboxClass: 'icheckbox_square-blue',
+            radioClass: 'iradio_square-blue',
+            increaseArea: '20%' // optional
+        });
+        $('#_username').focus();
+    });
+</script>
+</body>
+</html>

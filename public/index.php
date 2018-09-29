@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 use App\Kernel;
 use Symfony\Component\Debug\Debug;
@@ -16,7 +16,7 @@ if (!isset($_SERVER['APP_ENV']) && !isset($_ENV['APP_ENV'])) {
 }
 
 $env = $_SERVER['APP_ENV'] ?? $_ENV['APP_ENV'] ?? 'dev';
-$debug = (bool) ($_SERVER['APP_DEBUG'] ?? $_ENV['APP_DEBUG'] ?? ('prod' !== $env));
+$debug = (bool) ($_SERVER['APP_DEBUG'] ?? $_ENV['APP_DEBUG'] ?? ($env !== 'prod'));
 
 if ($debug) {
     umask(0000);
@@ -24,11 +24,13 @@ if ($debug) {
     Debug::enable();
 }
 
-if ($trustedProxies = $_SERVER['TRUSTED_PROXIES'] ?? $_ENV['TRUSTED_PROXIES'] ?? false) {
+$trustedProxies = $_SERVER['TRUSTED_PROXIES'] ?? $_ENV['TRUSTED_PROXIES'] ?? false;
+if ($trustedProxies) {
     Request::setTrustedProxies(explode(',', $trustedProxies), Request::HEADER_X_FORWARDED_ALL ^ Request::HEADER_X_FORWARDED_HOST);
 }
 
-if ($trustedHosts = $_SERVER['TRUSTED_HOSTS'] ?? $_ENV['TRUSTED_HOSTS'] ?? false) {
+$trustedHosts = $_SERVER['TRUSTED_HOSTS'] ?? $_ENV['TRUSTED_HOSTS'] ?? false;
+if ($trustedHosts) {
     Request::setTrustedHosts(explode(',', $trustedHosts));
 }
 

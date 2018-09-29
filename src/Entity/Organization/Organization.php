@@ -1,11 +1,13 @@
-<?php declare(strict_types=1);
+<?php declare(strict_types = 1);
 
-namespace App\Entity;
+namespace App\Entity\Organization;
 
 use App\Entity\Geo\District;
 use App\Entity\Geo\Municipality;
 use App\Entity\Geo\Region;
 use App\Model\Doctrine\Point;
+use App\Model\DoctrineTraits\TimestampableTrait;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Ramsey\Uuid\Uuid;
@@ -20,6 +22,8 @@ use Ramsey\Uuid\UuidInterface;
  */
 class Organization
 {
+    use TimestampableTrait;
+
     /**
      * @var UuidInterface
      *
@@ -44,7 +48,7 @@ class Organization
     protected $slug;
 
     /**
-     * CRN (=company registration number)
+     * CRN (=company registration number = IČ)
      *
      * @var string|null
      * @ORM\Column(name="crn", type="string", length=12, nullable=true)
@@ -52,7 +56,7 @@ class Organization
     protected $crn;
 
     /**
-     * TIN (=tax identification number)
+     * TIN (=tax identification number = DIČ)
      *
      * @var string|null
      * @ORM\Column(name="tin", type="string", length=12, nullable=true)
@@ -117,42 +121,27 @@ class Organization
     protected $municipality;
 
     /**
-     * @var \DateTime
-     * @ORM\Column(name="created_at", type="datetime", nullable=false)
+     * @var OrganizationHasCategory[]|ArrayCollection
+     *
+     * @ORM\OneToMany(
+     *     targetEntity="App\Entity\Organization\OrganizationHasCategory",
+     *     mappedBy="organization",
+     *     cascade={"persist"},
+     *     orphanRemoval=true,
+     * )
+     * @ORM\OrderBy({"position" = "ASC"})
      */
-    protected $createdAt;
-
-    /**
-     * @var \DateTime|null
-     * @ORM\Column(name="updated_at", type="datetime", nullable=true)
-     */
-    protected $updatedAt;
+    protected $hasCategories;
 
     public function __construct()
     {
         $this->id = Uuid::uuid4();
-        $this->createdAt = new \DateTime();
+        $this->hasCategories = new ArrayCollection();
     }
 
     public function getId(): UuidInterface
     {
         return $this->id;
-    }
-
-    /**
-     * @ORM\PrePersist()
-     */
-    public function prePersist(): void
-    {
-        $this->createdAt = new \DateTime();
-    }
-
-    /**
-     * @ORM\PreUpdate()
-     */
-    public function preUpdate(): void
-    {
-        $this->updatedAt = new \DateTime();
     }
 
     public function getName(): ?string
@@ -311,26 +300,45 @@ class Organization
         return $this;
     }
 
-    public function getCreatedAt(): \DateTime
+    /**
+     * @return OrganizationHasCategory[]|ArrayCollection
+     */
+    public function getHasCategories()
     {
-        return $this->createdAt;
+        return $this->hasCategories;
     }
 
-    public function setCreatedAt(\DateTime $createdAt): self
+    public function addHasCategory(OrganizationHasCategory $hasCategory): self
     {
-        $this->createdAt = $createdAt;
+        if (!$this->hasCategories->contains($hasCategory)) {
+            $this->hasCategories->add($hasCategory);
+            $hasCategory->setOrganization($this);
+        }
 
         return $this;
     }
 
-    public function getUpdatedAt(): ?\DateTime
+    public function removeHasCategory(OrganizationHasCategory $hasCategory): self
     {
-        return $this->updatedAt;
+        if ($this->hasCategories->contains($hasCategory)) {
+            $this->hasCategories->removeElement($hasCategory);
+        }
+
+        return $this;
     }
 
-    public function setUpdatedAt(?\DateTime $updatedAt): self
+    /**
+     * @param OrganizationHasCategory[]|ArrayCollection $hasCategories
+     *
+     * @return $this
+     */
+    public function setHasCategories($hasCategories): self
     {
-        $this->updatedAt = $updatedAt;
+        $this->hasCategories = $hasCategories;
+
+        foreach ($hasCategories as $hasCategory) {
+            $hasCategory->setOrganization($this);
+        }
 
         return $this;
     }

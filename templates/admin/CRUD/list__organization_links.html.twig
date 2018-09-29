@@ -1,0 +1,14 @@
+{# @var object \App\Entity\Organization\Organization #}
+
+{% extends '@SonataAdmin/CRUD/base_list_field.html.twig' %}
+
+{% block field %}
+    <div class="btn-group">
+        {% set _link_fb = object.facebook|default('#') %}
+        {% set _link_www = object.www|default('#') %}
+        {% set _link_email = object.email|default('#') %}
+        <a href="{{ _link_fb }}" class="btn btn-sm btn-default {% if object.facebook is empty %} disabled{% endif %}" title="Facebook" target="_blank"><i class="fa fa-facebook"></i></a>
+        <a href="{{ _link_www }}" class="btn btn-sm btn-default {% if object.www is empty %} disabled{% endif %}" title="Webové stránky" target="_blank"><i class="fa fa-globe"></i></a>
+        <a href="mailto:{{ _link_email }}" class="btn btn-sm btn-default {% if object.email is empty %} disabled{% endif %}" title="E-mail" target="_blank"><i class="fa fa-envelope"></i></a>
+    </div>
+{% endblock %}

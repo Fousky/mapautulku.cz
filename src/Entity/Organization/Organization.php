@@ -14,7 +14,7 @@ use Ramsey\Uuid\Uuid;
 use Ramsey\Uuid\UuidInterface;
 
 /**
- * @ORM\Entity()
+ * @ORM\Entity(repositoryClass="App\Repository\Organization\OrganizationRepository")
  * @ORM\Table(name="organization")
  * @ORM\HasLifecycleCallbacks()
  *

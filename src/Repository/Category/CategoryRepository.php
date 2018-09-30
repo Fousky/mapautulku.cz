@@ -44,4 +44,22 @@ class CategoryRepository extends EntityRepository
 
         return $category;
     }
+
+    public function createChoices(): array
+    {
+        /** @var Category[] $categories */
+        $categories = $this->createQueryBuilder('category')
+            ->where('category.public = 1')
+            ->orderBy('category.name', 'ASC')
+            ->getQuery()
+            ->getResult();
+
+        $result = [];
+
+        foreach ($categories as $category) {
+            $result[$category->getName()] = $category->getSlug();
+        }
+
+        return $result;
+    }
 }

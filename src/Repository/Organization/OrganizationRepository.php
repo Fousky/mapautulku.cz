@@ -4,7 +4,6 @@ namespace App\Repository\Organization;
 
 use App\Entity\Organization\Organization;
 use App\Model\OrganizationList\OrganizationFilter;
-use App\Model\OrganizationList\OrganizationSorting;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityRepository;
 use Pagerfanta\Adapter\DoctrineORMAdapter;
@@ -21,18 +20,16 @@ class OrganizationRepository extends EntityRepository
     }
 
     public function createFilteredPaginator(
-        OrganizationFilter $filters,
-        OrganizationSorting $sorting
+        OrganizationFilter $filters
     ): Pagerfanta
     {
         $builder = $this->createQueryBuilder('organization');
 
         $filters->apply($builder);
-        $sorting->apply($builder);
 
         $paginator = new Pagerfanta(new DoctrineORMAdapter($builder->getQuery()));
         $paginator->setMaxPerPage($filters->getPerPage());
-        $paginator->setCurrentPage($filters->getCurrentPage());
+        $paginator->setCurrentPage($filters->getPage());
 
         return $paginator;
     }

@@ -8,6 +8,27 @@
                 <div class="col-md-12">
                     <h1>Seznam útulků{% if category %} {{ category.nameInAkuzativ }}{% endif %}</h1>
 
+                    <div class="jumbotron">
+                        {% form_theme filterForm 'bootstrap_4_layout.html.twig' %}
+                        {{ form_start(filterForm) }}
+                        <div class="row">
+                            <div class="col-md-4">{{ form_row(filterForm.regions) }}</div>
+                            <div class="col-md-4">{{ form_row(filterForm.districts) }}</div>
+                            <div class="col-md-4">{{ form_row(filterForm.municipalities) }}</div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-4">{{ form_row(filterForm.categories) }}</div>
+                            <div class="col-md-4">{{ form_row(filterForm.perPage) }}</div>
+                            <div class="col-md-4">{{ form_row(filterForm.sort) }}</div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-4">
+                                {{ form_widget(filterForm.submit, {'attr': {'class': 'btn btn-primary btn-block'}}) }}
+                            </div>
+                        </div>
+                        {{ form_end(filterForm) }}
+                    </div>
+
                     {% if paginator.count > 0 %}
                         <ul>
                             {% for org in paginator.iterator %}

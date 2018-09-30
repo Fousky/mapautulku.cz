@@ -3,6 +3,9 @@
 namespace App\Model\OrganizationList;
 
 use App\Entity\Organization\Category;
+use App\Model\Enum\OrganizationSortByEnum;
+use App\Model\Enum\SortOrderEnum;
+use Consistence\Enum\InvalidEnumValueException;
 use Consistence\InvalidArgumentTypeException;
 use Consistence\Type\Type;
 use Doctrine\ORM\QueryBuilder;
@@ -16,7 +19,7 @@ class OrganizationFilter
     public const DEFAULT_PER_PAGE = 12;
 
     /** @var int */
-    protected $currentPage = 1;
+    protected $page = 1;
 
     /** @var int */
     protected $perPage = self::DEFAULT_PER_PAGE;
@@ -36,18 +39,47 @@ class OrganizationFilter
     /** @var string[] */
     protected $municipalities = [];
 
+    /** @var string */
+    protected $sort = OrganizationSortByEnum::BY_NAME . '-' . SortOrderEnum::ORDER_ASC;
+
+    protected $sortBy = OrganizationSortByEnum::BY_NAME;
+    protected $sortOrder = SortOrderEnum::ORDER_ASC;
+
+    public static $sortingChoices = [
+        'Název (a-z)' => OrganizationSortByEnum::BY_NAME . '-' . SortOrderEnum::ORDER_ASC,
+        'Název (z-a)' => OrganizationSortByEnum::BY_NAME . '-' . SortOrderEnum::ORDER_DESC,
+        'Datum (nejnovější)' => OrganizationSortByEnum::BY_DATE . '-' . SortOrderEnum::ORDER_DESC,
+        'Datum (nejstarší)' => OrganizationSortByEnum::BY_DATE . '-' . SortOrderEnum::ORDER_ASC,
+    ];
+
+    public static $perPageChoices = [
+        self::DEFAULT_PER_PAGE => self::DEFAULT_PER_PAGE,
+        24 => 24,
+        48 => 48,
+    ];
+
+    private static $sortingPropertyMap = [
+        OrganizationSortByEnum::BY_NAME => 'organization.name',
+        OrganizationSortByEnum::BY_DATE => 'organization.createdAt',
+    ];
+
+    /** @var array|null */
+    private $_filters;
+
     public function create(Request $request, ?Category $category): self
     {
         $filter = new static();
 
         return $filter
-            ->setCurrentPage($this->extractPage($request))
+            ->setPage($this->extractPage($request))
             ->setPerPage($this->extractPerPage($request))
             ->setCategories($this->extractCategories($request, $category))
             ->setTypes($this->extractTypes($request))
             ->setRegions($this->extractRegions($request))
             ->setDistricts($this->extractDistricts($request))
             ->setMunicipalities($this->extractMunicipalities($request))
+            ->setSortBy($this->extractSortBy($request))
+            ->setSortOrder($this->extractSortOrder($request))
         ;
     }
 
@@ -58,6 +90,24 @@ class OrganizationFilter
         $this->applyRegions($builder);
         $this->applyDistricts($builder);
         $this->applyMunicipalities($builder);
+        $this->applySorting($builder);
+    }
+
+    public function applySorting(QueryBuilder $builder): void
+    {
+        if (!array_key_exists($this->getSortBy(), self::$sortingPropertyMap)) {
+            throw new \RuntimeException(sprintf(
+                'SortBy `%s` is not implemented in %s.',
+                $this->getSortBy(),
+                __METHOD__
+            ));
+        }
+
+        $builder
+            ->orderBy(
+                self::$sortingPropertyMap[$this->getSortBy()],
+                $this->getSortOrder()
+            );
     }
 
     private function applyCategories(QueryBuilder $builder): void
@@ -111,19 +161,15 @@ class OrganizationFilter
 
     private function extractPage(Request $request): int
     {
-        try {
-            $page = $request->query->getInt('page', 1);
-        } catch (\Throwable $exception) {
-            $page = 1;
-        }
-
-        return $page;
+        return $request->query->getInt('page', 1);
     }
 
     private function extractPerPage(Request $request): int
     {
+        $filters = $this->extractFilters($request);
+
         try {
-            $perPage = $request->query->getInt('perPage', self::DEFAULT_PER_PAGE);
+            $perPage = array_key_exists('perPage', $filters) ? (int) $filters['perPage'] : self::DEFAULT_PER_PAGE;
         } catch (\Throwable $exception) {
             $perPage = self::DEFAULT_PER_PAGE;
         }
@@ -133,7 +179,8 @@ class OrganizationFilter
 
     private function extractCategories(Request $request, ?Category $category): array
     {
-        $categories = (array) $request->query->get('categories', []);
+        $filters = $this->extractFilters($request);
+        $categories = array_key_exists('categories', $filters) ? (array) $filters['categories'] : [];
 
         try {
             Type::checkType($categories, 'string[]');
@@ -150,7 +197,8 @@ class OrganizationFilter
 
     private function extractTypes(Request $request): array
     {
-        $types = (array) $request->get('types', []);
+        $filters = $this->extractFilters($request);
+        $types = array_key_exists('types', $filters) ? (array) $filters['types'] : [];
 
         try {
             Type::checkType($types, 'string[]');
@@ -163,7 +211,8 @@ class OrganizationFilter
 
     private function extractRegions(Request $request): array
     {
-        $regions = (array) $request->get('regions', []);
+        $filters = $this->extractFilters($request);
+        $regions = array_key_exists('regions', $filters) ? (array) $filters['regions'] : [];
 
         try {
             Type::checkType($regions, 'string[]');
@@ -176,7 +225,8 @@ class OrganizationFilter
 
     private function extractDistricts(Request $request): array
     {
-        $districts = (array) $request->get('districts', []);
+        $filters = $this->extractFilters($request);
+        $districts = array_key_exists('districts', $filters) ? (array) $filters['districts'] : [];
 
         try {
             Type::checkType($districts, 'string[]');
@@ -189,7 +239,8 @@ class OrganizationFilter
 
     private function extractMunicipalities(Request $request): array
     {
-        $municipalities = (array) $request->get('municipalities', []);
+        $filters = $this->extractFilters($request);
+        $municipalities = array_key_exists('municipalities', $filters) ? (array) $filters['municipalities'] : [];
 
         try {
             Type::checkType($municipalities, 'string[]');
@@ -198,6 +249,15 @@ class OrganizationFilter
         }
 
         return $municipalities;
+    }
+
+    private function extractFilters(Request $request): array
+    {
+        if ($this->_filters === null) {
+            $this->_filters = (array) $request->query->get(OrganizationFilterFormType::NAME, []);
+        }
+
+        return $this->_filters;
     }
 
     public function getCategories(): array
@@ -260,18 +320,18 @@ class OrganizationFilter
         return $this;
     }
 
-    public function getCurrentPage(): int
+    public function getPage(): int
     {
-        return $this->currentPage;
+        return $this->page;
     }
 
-    public function setCurrentPage(int $currentPage): self
+    public function setPage(int $page): self
     {
-        if ($currentPage <= 1) {
-            $currentPage = 1;
+        if ($page <= 1) {
+            $page = 1;
         }
 
-        $this->currentPage = $currentPage;
+        $this->page = $page;
 
         return $this;
     }
@@ -288,6 +348,89 @@ class OrganizationFilter
         }
 
         $this->perPage = $perPage;
+
+        return $this;
+    }
+
+    private function extractSortBy(Request $request): string
+    {
+        $sort = $this->extractSort($request);
+
+        $sortBy = OrganizationSortByEnum::BY_NAME;
+
+        if (strpos($sort, '-') !== false) {
+            [$sortBy, ] = explode('-', $sort);
+        }
+
+        return $sortBy;
+    }
+
+    private function extractSortOrder(Request $request): string
+    {
+        $sort = $this->extractSort($request);
+
+        $sortOrder = SortOrderEnum::ORDER_ASC;
+
+        if (strpos($sort, '-') !== false) {
+            [, $sortOrder] = explode('-', $sort);
+        }
+
+        return $sortOrder;
+    }
+
+    private function extractSort(Request $request): string
+    {
+        $filters = $this->extractFilters($request);
+
+        return array_key_exists('sort', $filters)
+            ? $filters['sort']
+            : OrganizationSortByEnum::BY_NAME .'-'. SortOrderEnum::ORDER_ASC;
+    }
+
+    public function getSortBy(): string
+    {
+        return $this->sortBy;
+    }
+
+    public function setSortBy(string $sortBy): self
+    {
+        try {
+            OrganizationSortByEnum::checkValue($sortBy);
+        } catch (InvalidEnumValueException $exception) {
+            $sortBy = OrganizationSortByEnum::BY_NAME;
+        }
+
+        $this->sortBy = $sortBy;
+
+        return $this;
+    }
+
+    public function getSortOrder(): string
+    {
+        return $this->sortOrder;
+    }
+
+    public function setSortOrder(string $sortOrder): self
+    {
+        try {
+            SortOrderEnum::checkValue($sortOrder);
+        } catch (InvalidEnumValueException $exception) {
+            $sortOrder = SortOrderEnum::ORDER_ASC;
+        }
+
+        $this->sortOrder = $sortOrder;
+
+        return $this;
+    }
+
+    public function getSort(): string
+    {
+        return $this->sort;
+    }
+
+    public function setSort(string $sort): self
+    {
+        $this->sort = $sort;
 
         return $this;
     }

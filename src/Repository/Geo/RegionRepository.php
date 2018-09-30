@@ -34,4 +34,17 @@ class RegionRepository extends EntityRepository
         $this->_em->persist($region);
         $this->_em->flush($region);
     }
+
+    public function createChoices(): array
+    {
+        /** @var Region[] $regions */
+        $regions = $this->findBy([], ['title' => 'ASC']);
+        $result = [];
+
+        foreach ($regions as $region) {
+            $result[$region->getTitle()] = $region->getId()->toString();
+        }
+
+        return $result;
+    }
 }

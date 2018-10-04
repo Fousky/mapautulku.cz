@@ -5,3 +5,5 @@ twig:
     form_themes:
         - 'bootstrap_4_horizontal_layout.html.twig'
         - 'admin/form/gps.html.twig'
+    globals:
+        google_maps_key: '%env(string:GOOGLE_MAPS_KEY)%'

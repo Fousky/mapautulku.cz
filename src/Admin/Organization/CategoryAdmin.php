@@ -27,6 +27,10 @@ class CategoryAdmin extends AbstractAdmin
             ->add('public', null, [
                 'label' => 'Veřejná?',
             ])
+            ->add('icon', null, [
+                'label' => 'Ikona',
+                'help' => 'Sada z Iconsmind',
+            ])
         ;
     }
 
@@ -41,6 +45,10 @@ class CategoryAdmin extends AbstractAdmin
             ])
             ->add('public', null, [
                 'label' => 'Veřejná?',
+                'editable' => true,
+            ])
+            ->add('icon', null, [
+                'label' => 'Ikona',
                 'editable' => true,
             ])
             ->add('_action', null, [

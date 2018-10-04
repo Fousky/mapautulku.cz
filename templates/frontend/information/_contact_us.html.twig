@@ -1,0 +1,81 @@
+{% extends 'frontend/base.html.twig' %}
+
+{% block body %}
+
+    <div id="titlebar">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <h2>Kontakt</h2>
+                    <nav id="breadcrumbs">
+                        <ul>
+                            <li><a href="{{ path('_app_homepage') }}">Domů</a></li>
+                            <li>Kontakt</li>
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4">
+                <div class="sidebar-textbox">
+                    <p>
+                        Vždy se snažíme reagovat v rámci rozumné doby, ale ne vždy sedíme u počítače.
+                    </p>
+
+                    <ul class="contact-details">
+                        <li><i class="im im-icon-Phone-2"></i> <strong>Telefon:</strong> <span>+420 773 831 431</span></li>
+                        <li><i class="im im-icon-Globe"></i> <strong>Web:</strong> <span><a href="#">www.mapautulku.cz</a></span></li>
+                        <li><i class="im im-icon-Envelope"></i> <strong>E-Mail:</strong> <span><a href="#">info@mapautulku.cz</a></span></li>
+                    </ul>
+                </div>
+
+            </div>
+
+            <!-- Contact Form -->
+            <div class="col-md-8">
+
+                <section id="contact">
+                    <h4 class="headline margin-bottom-35">Contact Form</h4>
+
+                    <div id="contact-message"></div>
+
+                    <form method="post" action="contact.php" name="contactform" id="contactform" autocomplete="on">
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div>
+                                    <input name="name" type="text" id="name" placeholder="Your Name" required="required" />
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div>
+                                    <input name="email" type="email" id="email" placeholder="Email Address" pattern="^[A-Za-z0-9](([_\.\-]?[a-zA-Z0-9]+)*)@([A-Za-z0-9]+)(([\.\-]?[a-zA-Z0-9]+)*)\.([A-Za-z]{2,})$" required="required" />
+                                </div>
+                            </div>
+                        </div>
+
+                        <div>
+                            <input name="subject" type="text" id="subject" placeholder="Subject" required="required" />
+                        </div>
+
+                        <div>
+                            <textarea name="comments" cols="40" rows="3" id="comments" placeholder="Message" spellcheck="true" required="required"></textarea>
+                        </div>
+
+                        <input type="submit" class="submit button" id="submit" value="Submit Message" />
+
+                    </form>
+                </section>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="margin-bottom-40"></div>
+
+{% endblock %}

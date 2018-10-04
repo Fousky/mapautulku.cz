@@ -1,0 +1,141 @@
+{% extends 'frontend/base.html.twig' %}
+
+{% block body %}
+
+    <div class="main-search-container" data-background-image="{{ asset('assets/images/main-search-background-01.jpg') }}">
+        <div class="main-search-inner">
+
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-12">
+                        <h2>Mapa útulků v ČR</h2>
+                        <h4>přehledně a na jednom místě</h4>
+
+                        <form method="get">
+                            <div class="main-search-input">
+
+                                <div class="main-search-input-item">
+                                    <select name="_f[categories]" title="Kategorie zvířat" data-placeholder="Všechna zvířata" class="chosen-select" >
+                                        <option>Všechna zvířata</option>
+                                        {% for category in categories %}
+                                            <option value="{{ category.slug }}">Útulky {{ category.nameInAkuzativ }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+
+                                <div class="main-search-input-item location">
+                                    <div id="autocomplete-container">
+                                        <input id="autocomplete-input" type="text" placeholder="Hledáte konkrétní oblast?">
+                                    </div>
+                                    <a href="#"><i class="fa fa-map-marker"></i></a>
+                                </div>
+
+                                <button type="submit" class="button">Zobrazit útulky</button>
+
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="categories-boxes-container margin-top-5 margin-bottom-30">
+
+                    <a href="{{ path('_app_organizations_map') }}" class="category-small-box">
+                        <i class="im im-icon-Sunglasses-Smiley"></i>
+                        <h4>Všechna zvířata</h4>
+                    </a>
+
+                    {% for category in categories %}
+                        <a href="{{ path('_app_organizations_map', {'slug': category.slug}) }}" class="category-small-box">
+                            <i class="{{ category.icon }}"></i>
+                            <h4>{{ category.name }}</h4>
+                        </a>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <a href="{{ path('_app_organization_add') }}" class="flip-banner parallax margin-top-65" data-background="images/slider-bg-02.jpg" data-color="#f91942" data-color-opacity="0.85" data-img-width="2500" data-img-height="1666">
+        <div class="flip-banner-content">
+            <h2 class="flip-visible">Nenašli jste organizaci nebo útulek?</h2>
+            <h2 class="flip-hidden">Přidat útulek <i class="sl sl-icon-arrow-right"></i></h2>
+        </div>
+    </a>
+
+{% endblock %}
+
+{% block old_body %}
+
+    <section>
+        <div class="jumbotron jumbotron-fluid">
+            <div class="container text-center">
+                <div class="row">
+                    <div class="col-md-12">
+                        <h1 class="display-4"></h1>
+                        <h3>.. přehledně a na jednom místě ..</h3>
+                        <hr class="my-4" />
+                        <div class="row">
+                            <div class="col-md-6 offset-md-3">
+                                <p class="lead">
+                                    Projekt, jehož cílem je umožnit vyhledávání a vizualizaci organizací, které pomáhají zvířatům v nouzi v ČR.
+                                </p>
+                                <p>Veškeré informace jsou poskytovány pod svobodnou licencí Creative Commons 4.0 a může je využívat kdokoli.</p>
+                            </div>
+                        </div>
+                        <hr class="my-4" />
+                        <h2>Nyní jsme ve fázi <strong>získávání dat</strong> ...</h2>
+                        <div class="row">
+                            <div class="col-md-6 offset-md-3">
+                                <p>
+                                    Jsme na začátku našeho úsilí a snažíme se získat informace o organizacích v ČR.
+                                    <strong>Pomozte nám a přidejte organizace</strong>, které znáte.
+                                    Děkujeme!
+                                </p>
+                            </div>
+                        </div>
+                        <p class="lead">
+                            <a class="btn btn-primary btn-lg" href="{{ path('_app_organization_add') }}" role="button">
+                                Přidat útulek
+                            </a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+
+    <!-- Google Autocomplete -->
+    <script>
+        function initAutocomplete() {
+            var input = document.getElementById('autocomplete-input');
+            var autocomplete = new google.maps.places.Autocomplete(input);
+
+            autocomplete.addListener('place_changed', function() {
+                var place = autocomplete.getPlace();
+                if (!place.geometry) {
+                    window.alert("No details available for input: '" + place.name + "'");
+                    return;
+                }
+            });
+
+            if ($('.main-search-input-item')[0]) {
+                setTimeout(function(){
+                    $(".pac-container").prependTo("#autocomplete-container");
+                }, 300);
+            }
+        }
+    </script>
+    <script src="https://maps.googleapis.com/maps/api/js?libraries=places&callback=initAutocomplete&key={{ google_maps_key }}"></script>
+{% endblock %}

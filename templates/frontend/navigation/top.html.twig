@@ -1,43 +1,65 @@
 {% set _route = app.request.attributes.get('_route') %}
 
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-    <div class="container">
-        <a class="navbar-brand" href="{{ path('_app_homepage') }}">
-            MapaÚtulků.cz
-        </a>
+<header id="header-container">
 
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
+    <div id="header">
+        <div class="container">
 
-        <div class="collapse navbar-collapse" id="navbarResponsive">
-            <ul class="navbar-nav ml-auto">
-                <li class="nav-item{% if _route == '_app_homepage' %} active{% endif %}">
-                    <a class="nav-link" href="{{ path('_app_homepage') }}">
-                        Domů
-                        <span class="sr-only">(current)</span>
+            <div class="left-side">
+
+                <div id="logo">
+                    <a href="{{ path('_app_homepage') }}" title="Na hlavní stranu">
+                        <img src="{{ asset('assets/images/logo.png') }}" alt="MapaUtulku.cz" />
                     </a>
-                </li>
+                </div>
 
-                <li class="nav-item">
-                    <a class="nav-link{% if _route == '_app_organizations' %} active{% endif %}" href="{{ path('_app_organizations') }}">
-                        Seznam útulků
-                    </a>
-                </li>
+                <div class="mmenu-trigger">
+                    <button class="hamburger hamburger--collapse" type="button">
+						<span class="hamburger-box">
+							<span class="hamburger-inner"></span>
+						</span>
+                    </button>
+                </div>
 
-                <li class="nav-item">
-                    <a class="nav-link{% if _route == '_app_info_about' %} active{% endif %}" href="{{ path('_app_info_about') }}">
-                        O projektu
-                    </a>
-                </li>
+                <nav id="navigation" class="style-1">
+                    <ul id="responsive">
+                        <li>
+                            <a href="{{ path('_app_homepage') }}" class="{% if _route == '_app_homepage' %}current{% endif %}">
+                                Domů
+                            </a>
+                        </li>
 
-                <li class="nav-item">
-                    <a class="nav-link btn btn-primary" href="{{ path('_app_organization_add') }}">
-                        <i class="fa fa-plus"></i>
+                        <li>
+                            <a class="{% if _route == '_app_organizations_map' %}current{% endif %}" href="{{ path('_app_organizations_map') }}">
+                                Mapa útulků
+                            </a>
+                        </li>
+
+                        <li>
+                            <a class="{% if _route == '_app_organizations_list' %}current{% endif %}" href="{{ path('_app_organizations_list') }}">
+                                Seznam útulků
+                            </a>
+                        </li>
+
+                        <li>
+                            <a class="{% if _route == '_app_info_about' %}current{% endif %}" href="{{ path('_app_info_about') }}">
+                                O projektu
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
+                <div class="clearfix"></div>
+            </div>
+
+            <div class="right-side">
+                <div class="header-widget">
+                    <a href="{{ path('_app_organization_add') }}" class="button border with-icon">
                         Přidat útulek
+                        <i class="sl sl-icon-plus"></i>
                     </a>
-                </li>
-            </ul>
+                </div>
+            </div>
         </div>
     </div>
-</nav>
+</header>
+<div class="clearfix"></div>

@@ -29,7 +29,7 @@ class HomepageController extends Controller
     {
         $categories = $this->categoryRepository->getForHomepage();
 
-        return $this->render('frontend/homepage/index.html.twig', [
+        return $this->render('frontend/homepage/_homepage.html.twig', [
             'categories' => $categories,
         ]);
     }

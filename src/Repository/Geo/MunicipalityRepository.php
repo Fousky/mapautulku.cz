@@ -21,4 +21,16 @@ class MunicipalityRepository extends EntityRepository
         $this->_em->persist($municipality);
         $this->_em->flush($municipality);
     }
+
+    public function findByTitles(string $municipalityTitle, string $districtTitle): ?Municipality
+    {
+        return $this->createQueryBuilder('municipality')
+            ->join('municipality.district', 'district')
+            ->where('municipality.title LIKE :municipalityTitle')
+            ->andWhere('district.title LIKE :districtTitle')
+            ->setParameter('municipalityTitle', $municipalityTitle)
+            ->setParameter('districtTitle', $districtTitle)
+            ->getQuery()
+            ->getOneOrNullResult();
+    }
 }

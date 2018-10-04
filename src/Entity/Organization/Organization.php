@@ -3,6 +3,7 @@
 namespace App\Entity\Organization;
 
 use App\Entity\Geo\District;
+use App\Entity\Geo\DistrictZipCode;
 use App\Entity\Geo\Municipality;
 use App\Entity\Geo\Region;
 use App\Model\Doctrine\Point;
@@ -114,6 +115,13 @@ class Organization
     protected $district;
 
     /**
+     * @var DistrictZipCode|null
+     * @ORM\ManyToOne(targetEntity="App\Entity\Geo\DistrictZipCode")
+     * @ORM\JoinColumn(name="zip_id", referencedColumnName="district_zip_id", onDelete="SET NULL")
+     */
+    protected $zip;
+
+    /**
      * @var Municipality|null
      * @ORM\ManyToOne(targetEntity="App\Entity\Geo\Municipality")
      * @ORM\JoinColumn(name="municipality_id", referencedColumnName="municipality_id", onDelete="SET NULL")
@@ -132,6 +140,12 @@ class Organization
      * @ORM\OrderBy({"position" = "ASC"})
      */
     protected $hasCategories;
+
+    /**
+     * @var \DateTime|null
+     * @ORM\Column(name="founded_at", type="date", nullable=true)
+     */
+    protected $foundedAt;
 
     public function __construct()
     {
@@ -339,6 +353,30 @@ class Organization
         foreach ($hasCategories as $hasCategory) {
             $hasCategory->setOrganization($this);
         }
+
+        return $this;
+    }
+
+    public function getFoundedAt(): ?\DateTime
+    {
+        return $this->foundedAt;
+    }
+
+    public function setFoundedAt(?\DateTime $foundedAt): self
+    {
+        $this->foundedAt = $foundedAt;
+
+        return $this;
+    }
+
+    public function getZip(): ?DistrictZipCode
+    {
+        return $this->zip;
+    }
+
+    public function setZip(?DistrictZipCode $zip): self
+    {
+        $this->zip = $zip;
 
         return $this;
     }

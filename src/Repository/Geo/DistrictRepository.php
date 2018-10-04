@@ -21,4 +21,13 @@ class DistrictRepository extends EntityRepository
         $this->_em->persist($district);
         $this->_em->flush($district);
     }
+
+    public function findByTitle(string $title): ?District
+    {
+        return $this->createQueryBuilder('district')
+            ->where('district.title LIKE :title')
+            ->setParameter('title', $title)
+            ->getQuery()
+            ->getOneOrNullResult();
+    }
 }

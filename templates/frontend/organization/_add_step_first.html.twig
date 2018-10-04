@@ -1,0 +1,50 @@
+{% extends 'frontend/base.html.twig' %}
+
+{% block body %}
+
+    <div id="titlebar" class="gradient">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <h2><i class="sl sl-icon-plus"></i> Přidání útulku</h2>
+                    <nav id="breadcrumbs">
+                        <ul>
+                            <li><a href="{{ path('_app_homepage') }}">Domů</a></li>
+                            <li><a href="{{ path('_app_organizations_list') }}">Seznam útulků</a></li>
+                            <li>Přidání útulku</li>
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container margin-bottom-50">
+        <div class="row">
+            <div class="col-md-6 col-md-offset-3">
+                {% form_theme form 'frontend/form/theme.html.twig' %}
+                {{ form_start(form) }}
+                {{ form_row(form.crn, {'label': 'Zadejte IČ organizace:'}) }}
+
+                <div class="row">
+                    <div class="col-md-6">
+                        {{ form_widget(form.submit, {'label': 'Pokračovat', 'attr': {'class': 'button preview margin-top-0'}}) }}
+                    </div>
+                </div>
+                {{ form_end(form) }}
+
+                <div class="row">
+                    <div class="col-md-6 col-md-offset-6">
+                        <a href="{{ path('_app_organization_add_full', {'skip': 1}) }}" class="button border pull-right">Nevím, přeskočit</a>
+                    </div>
+                </div>
+
+                <hr class="margin-top-40" />
+
+                <p class="lead">
+                    Děkujeme, že nám pomáháte rozšiřovat informace o organizacích v ČR, ceníme si každé pomoci.
+                </p>
+            </div>
+        </div>
+    </div>
+{% endblock %}

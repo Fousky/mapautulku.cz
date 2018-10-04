@@ -98,6 +98,15 @@
     "gedmo/doctrine-extensions": {
         "version": "v2.4.36"
     },
+    "guzzlehttp/guzzle": {
+        "version": "6.3.3"
+    },
+    "guzzlehttp/promises": {
+        "version": "v1.3.1"
+    },
+    "guzzlehttp/psr7": {
+        "version": "1.4.2"
+    },
     "jakub-onderka/php-parallel-lint": {
         "version": "v1.0.0"
     },
@@ -136,6 +145,9 @@
     },
     "psr/container": {
         "version": "1.0.0"
+    },
+    "psr/http-message": {
+        "version": "1.0.1"
     },
     "psr/link": {
         "version": "1.0.0"

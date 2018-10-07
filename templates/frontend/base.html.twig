@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+    <title>{% block title %}MapaÚtulků.cz{% endblock %}</title>
+
+    {% block stylesheets %}
+        <link rel="stylesheet" href="{{ asset('assets/css/style.css') }}">
+        <link rel="stylesheet" href="{{ asset('assets/css/colors/main.css') }}" id="colors">
+    {% endblock %}
+</head>
+
+<body>
+
+<div id="wrapper">
+    {% include 'frontend/navigation/top.html.twig' %}
+
+    {% block flashes %}{% include 'frontend/_fragment/flashes.html.twig' %}{% endblock %}
+
+    {% block body %}{% endblock %}
+
+    {% block footer %}
+        {% include 'frontend/footer/_footer.html.twig' %}
+    {% endblock %}
+
+</div>
+
+    {% block javascripts %}
+        <script type="text/javascript" src="{{ asset('assets/scripts/jquery-2.2.0.min.js') }}"></script>
+        <script type="text/javascript" src="{{ asset('assets/scripts/mmenu.min.js') }}"></script>
+        <script type="text/javascript" src="{{ asset('assets/scripts/chosen.min.js') }}"></script>
+        {#<script type="text/javascript" src="{{ asset('assets/scripts/slick.min.js') }}"></script>#}
+        {#<script type="text/javascript" src="{{ asset('assets/scripts/rangeslider.min.js') }}"></script>#}
+        {#<script type="text/javascript" src="{{ asset('assets/scripts/magnific-popup.min.js') }}"></script>#}
+        {#<script type="text/javascript" src="{{ asset('assets/scripts/waypoints.min.js') }}"></script>#}
+        {#<script type="text/javascript" src="{{ asset('assets/scripts/counterup.min.js') }}"></script>#}
+        {#<script type="text/javascript" src="{{ asset('assets/scripts/jquery-ui.min.js') }}"></script>#}
+        {#<script type="text/javascript" src="{{ asset('assets/scripts/tooltips.min.js') }}"></script>#}
+        <script type="text/javascript" src="{{ asset('assets/scripts/custom.js') }}"></script>
+        <script type="text/javascript" src="{{ asset('assets/scripts/custom.app.js') }}"></script>
+    {% endblock %}
+
+</body>
+</html>

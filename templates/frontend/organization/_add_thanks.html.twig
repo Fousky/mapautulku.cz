@@ -1,27 +1,46 @@
-{% extends 'base.html.twig' %}
+{% extends 'frontend/base.html.twig' %}
 
 {% block body %}
 
-    <section class="my-4">
+    <div id="titlebar" class="gradient">
         <div class="container">
             <div class="row">
-                <div class="col-md-8 offset-md-2">
-                    <div class="alert alert-success">
-                        <h1>Děkujeme!</h1>
-                        <p class="lead">
-                            Vážíme si vaší pomoci.
-                        </p>
-                        <p>
-                            Pokud jste nám zanechali kontakt, dáme vám vědět, až organizaci zveřejníme.
-                        </p>
-                    </div>
+                <div class="col-md-12">
 
-                    <a href="{{ path('_app_organization_add') }}" class="btn btn-primary">
-                        Přidat další &rarr;
-                    </a>
+                    <h2><i class="sl sl-icon-plus"></i> Přidání organizace</h2>
+
+                    <nav id="breadcrumbs">
+                        <ul>
+                            <li><a href="{{ path('_app_homepage') }}">Domů</a></li>
+                            <li><a href="{{ path('_app_organizations_list') }}">Seznam útulků</a></li>
+                            <li><a href="{{ path('_app_organization_add') }}">Přidání organizace</a></li>
+                            <li>Hotovo</li>
+                        </ul>
+                    </nav>
                 </div>
             </div>
         </div>
-    </section>
+    </div>
+
+    <div class="container margin-bottom-50">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="notification large success">
+                    <h1>Děkujeme!</h1>
+                    <p>
+                        Vážíme si Vaší pomoci, lidé se brzy o této organizaci dozví a to jen díky Vám!
+                    </p>
+                    <p>
+                        Nyní musíme veškeré údaje zkontrolovat a zjistit přesné GPS souřadnice organizace.
+                        Někdy nám to může trvat, protože nejsme u PC každý den.
+                    </p>
+                </div>
+
+                <a href="{{ path('_app_organization_add') }}" class="button preview">
+                    Přidat další &rarr;
+                </a>
+            </div>
+        </div>
+    </div>
 
 {% endblock %}

@@ -1,63 +1,101 @@
-{% extends 'base.html.twig' %}
+{% extends 'frontend/base.html.twig' %}
 
 {% block body %}
 
-    <section class="my-4">
+    <div id="titlebar">
         <div class="container">
             <div class="row">
-                <div class="col-md-8 offset-md-2">
-
-                    <div class="jumbotron">
-                        <h1>O projektu MapaÚtulků.cz</h1>
-
-                        <hr class="my-4" />
-
-                        <p>
-                            Tento projekt vznikl ve spolupráci organizací <strong>Útulkov z.s.</strong> a <strong>Fousky z.s.</strong> za účelem
-                            shromažďování a vizualizace organizací, které na území ČR pomáhají zvířatům v nouzi.
-                        </p>
-
-                        <p>
-                            Organizace <strong>třídíme</strong> podle <strong>kategorie zvířat</strong> (kočky, psi apod.),
-                            <strong>typu</strong> (státní, obecní, nevládní apod.) a
-                            <strong>lokality</strong> (kraj, okres, obec apod.). V základním seznamu je možné pomocí těchto kritérií organizace
-                            filtrovat či vyhledávat. V budoucnosti tyto data promítneme do mapy.
-                        </p>
-
-                    </div>
-
-                    <hr class="my-4" />
-
-                    <h2>Proč projekt vznikl?</h2>
-                    <p>
-                        Důvodem je <strong>neexistence centralizované databáze</strong>, na kterou by se mohl člověk v případě nalezení zvířete
-                        obrátit a vyhledat informace o nejbližší záchranné stanici, útulku či organizaci, která poskytne radu či součinnost
-                        v krizové situaci.
-                    </p>
-
-                    <p>
-                        Sekundárním záměrem je mapování organizací v regionech, jejich počty, činnosti apod. Tyto informace následně mohou sloužit úředníkům v daných lokalitách v případě nouze.
-                    </p>
-
-                    <hr class="my-4" />
-
-                    <h2>Proč zde není mapa?</h2>
-                    <p>
-                        V současné době probíhá sběr dat a protože je před námi hodně práce, ještě data nezobrazujeme na žádné mapě.
-                        Do budoucna samozřejmě mapa bude, včetně různých filtrů a vyhledávání dle aktuální polohy.
-                    </p>
-
-                    <hr class="my-4" />
-
-                    <h2>Mohu data využít pro své účely?</h2>
-                    <p>
-                        Ano. Všechna data, která jsme shromáždili podléhají licenci Creative Commons 4.0, která umožňuje využití
-                        libovolného obsahu či dat pro komerční i nekomerční účely. Podmínkou užití je uvedení odkazu na zdroj.
-                        Celé <a href="https://creativecommons.org/licenses/by/4.0/deed.cs" target="_blank">znění licence najdete zde</a>.
-                    </p>
+                <div class="col-md-12">
+                    <h2>O projektu MapaÚtulků.cz</h2>
+                    <nav id="breadcrumbs">
+                        <ul>
+                            <li><a href="#">Domů</a></li>
+                            <li>O projektu</li>
+                        </ul>
+                    </nav>
                 </div>
             </div>
         </div>
-    </section>
+    </div>
+
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <p class="lead">
+                    Tento projekt vznikl ve spolupráci spolků <strong>Útulkov z.s.</strong> a <strong>Fousky z.s.</strong> za účelem
+                    shromažďování a vizualizace organizací, které na území ČR pomáhají zvířatům v nouzi.
+                </p>
+
+                <p class="lead">
+                    Organizace <strong>třídíme</strong> podle <strong>kategorie zvířat</strong> (kočky, psi apod.),
+                    <strong>typu</strong> (státní, nestátní apod.) a
+                    <strong>lokality</strong> (kraj, okres, obec apod.). V základním seznamu je možné pomocí těchto kritérií organizace
+                    filtrovat či vyhledávat. Informace je samozřejmě možné promítnout do mapy.
+                </p>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-12">
+                <h3 class="headline with-border margin-top-45 margin-bottom-25">
+                    Proč projekt vznikl?
+                </h3>
+
+                <p class="lead">
+                    Důvodem je <strong>neexistence centralizované databáze</strong>, na kterou by se mohl běžný občan obrátit v případě nouze
+                    a vyhledat informace o nejbližší záchranné stanici, útulku či organizaci, která poskytne pomocnou ruku
+                    v krizové situaci.
+                </p>
+
+                <p class="lead">
+                    Informace o organizacích chceme mapovat po celé ČR, zjistit přesné počty, činnosti a zasoupení
+                    pomoci zvířatům v jednotlivých regionech.
+                </p>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-12">
+                <h3 class="headline with-border margin-top-45 margin-bottom-25">
+                    Proč je zde tak málo informací?
+                </h3>
+
+                <p class="lead">
+                    V současné době <strong>probíhá sběr dat</strong> a protože je před námi hodně práce, ještě nemůžete čekat zázraky.
+                    Chcete-li nám pomoct a sbírat informace o organizacích, budeme moc rádi - <a href="{{ path('_app_info_contact') }}"><strong>napište nám</strong></a>.
+                </p>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-12">
+                <h3 class="headline with-border margin-top-45 margin-bottom-25">
+                    Mohu data využít pro své účely?
+                </h3>
+
+                <p class="lead">
+                    Ano, samozřejmě. Data, která jsme shromáždili podléhají licenci Creative Commons 4.0, která umožňuje využití
+                    libovolného obsahu či dat pro komerční i nekomerční účely. Podmínkou užití je uvedení odkazu na zdroj.
+                    Celé <a href="https://creativecommons.org/licenses/by/4.0/deed.cs" target="_blank">znění licence najdete zde</a>.
+                </p>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-12">
+                <h3 class="headline with-border margin-top-45 margin-bottom-25">
+                    Mohu organizaci přidat já?
+                </h3>
+
+                <p class="lead">
+                    Samozřejmě, budeme moc rádi. Díky lidem jako jste vy se může projekt rozšířit po celé ČR. Využijte možnost
+                    <a href="{{ path('_app_organization_add') }}"><strong>přidat organizaci</strong></a> a podpořte dobrou věc. Určitě to dejte vědět i přidávané organizaci, ať
+                    se o projektu dozví další lidé.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <div class="margin-bottom-40"></div>
 
 {% endblock %}

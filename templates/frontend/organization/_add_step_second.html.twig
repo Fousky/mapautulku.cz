@@ -1,0 +1,146 @@
+{% extends 'frontend/base.html.twig' %}
+
+{% block body %}
+
+    <div id="titlebar" class="gradient">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <h2><i class="sl sl-icon-plus"></i> Přidání organizace</h2>
+                    <nav id="breadcrumbs">
+                        <ul>
+                            <li><a href="{{ path('_app_homepage') }}">Domů</a></li>
+                            <li><a href="{{ path('_app_organizations_list') }}">Seznam útulků</a></li>
+                            <li>Přidání organizace</li>
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {% form_theme form 'frontend/form/theme.html.twig' %}
+    {{ form_start(form) }}
+    <div class="container margin-bottom-50">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="notification success large">
+                    <h4>Výborně! Organizaci jsme našli podle IČ, zbývá doplnit pár drobností.</h4>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <a href="{{ path('_app_organization_add') }}" title="Zpět" class="button pull-left">&larr; zpět</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="add-listing" class="separated-form">
+                    <div class="add-listing-section">
+                        <div class="add-listing-headline">
+                            <h3><i class="sl sl-icon-info"></i> Nalezené informace</h3>
+                        </div>
+                        <div class="row with-forms">
+                            <div class="col-md-12">
+                                <table class="table">
+                                    {% if org.name is not empty %}
+                                        <tr>
+                                            <td>Název:</td>
+                                            <td><strong>{{ org.name }}</strong></td>
+                                        </tr>
+                                    {% endif %}
+                                    {% if org.crn is not empty %}
+                                        <tr>
+                                            <td>IČ:</td>
+                                            <td>{{ org.crn }}</td>
+                                        </tr>
+                                    {% endif %}
+
+                                    {% if org.address is not empty %}
+                                        <tr>
+                                            <td>Adresa:</td>
+                                            <td>{{ org.address }}</td>
+                                        </tr>
+                                    {% endif %}
+
+                                    {% if org.foundedAt.format is defined %}
+                                        <tr>
+                                            <td>Datum vzniku:</td>
+                                            <td>{{ org.foundedAt.format('j. n. Y') }}</td>
+                                        </tr>
+                                    {% endif %}
+
+                                    {% if org.municipality.title is defined %}
+                                        <tr>
+                                            <td>Město:</td>
+                                            <td>{{ org.municipality.title }}</td>
+                                        </tr>
+                                    {% endif %}
+
+                                    {% if org.district.title is defined %}
+                                        <tr>
+                                            <td>Okres:</td>
+                                            <td>{{ org.district.title }}</td>
+                                        </tr>
+                                    {% endif %}
+
+                                    {% if org.region.title is defined %}
+                                        <tr>
+                                            <td>Kraj:</td>
+                                            <td>{{ org.region.title }}</td>
+                                        </tr>
+                                    {% endif %}
+                                </table>
+
+                                <div class="notification notice">
+                                    <p>
+                                        Pokud informace nesouhlasí vůbec, zkuste se <a href="{{ path('_app_organization_add') }}">vrátit zpět</a> a zkusit zadat IČ znovu.
+                                        Pokud nesedí jen část informací, nevadí -> my už si s tím poradíme.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="add-listing-section margin-top-15">
+                        <div class="add-listing-headline">
+                            <h3><i class="sl sl-icon-list"></i> Doplňte zvířata, kterým pomáhají</h3>
+                        </div>
+                        <div class="checkboxes checkbox-inline">
+                            {{ form_widget(form.hasCategories) }}
+                        </div>
+                    </div>
+
+                    <div class="add-listing-section margin-top-15">
+                        <div class="add-listing-headline">
+                            <h3><i class="sl sl-icon-envolope"></i> Doplňte kontaktní údaje</h3>
+                        </div>
+
+                        <div class="row with-forms">
+                            <div class="col-md-6">
+                                {{ form_row(form.phone) }}
+                            </div>
+                            <div class="col-md-6">
+                                {{ form_row(form.email) }}
+                            </div>
+                            <div class="col-md-6">
+                                {{ form_row(form.www) }}
+                            </div>
+                            <div class="col-md-6">
+                                {{ form_row(form.facebook) }}
+                            </div>
+                        </div>
+                    </div>
+
+                    {{ form_widget(form.submit) }}
+                </div>
+
+                <hr class="margin-top-40" />
+
+                <p class="lead">
+                    Děkujeme, že nám pomáháte rozšiřovat informace o organizacích v ČR, ceníme si každé pomoci.
+                </p>
+            </div>
+        </div>
+    </div>
+    {{ form_end(form) }}
+
+{% endblock %}

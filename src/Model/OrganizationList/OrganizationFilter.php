@@ -16,7 +16,7 @@ use Symfony\Component\HttpFoundation\Request;
  */
 class OrganizationFilter
 {
-    public const DEFAULT_PER_PAGE = 12;
+    public const DEFAULT_PER_PAGE = 6;
 
     /** @var int */
     protected $page = 1;
@@ -24,20 +24,20 @@ class OrganizationFilter
     /** @var int */
     protected $perPage = self::DEFAULT_PER_PAGE;
 
+    /** @var string|null */
+    protected $name;
+
     /** @var string[] */
     protected $categories = [];
 
     /** @var string[] */
     protected $types = [];
 
-    /** @var string[] */
-    protected $regions = [];
+    /** @var string|null */
+    protected $region;
 
-    /** @var string[] */
-    protected $districts = [];
-
-    /** @var string[] */
-    protected $municipalities = [];
+    /** @var string|null */
+    protected $district;
 
     /** @var string */
     protected $sort = OrganizationSortByEnum::BY_NAME . '-' . SortOrderEnum::ORDER_ASC;
@@ -53,9 +53,9 @@ class OrganizationFilter
     ];
 
     public static $perPageChoices = [
-        self::DEFAULT_PER_PAGE => self::DEFAULT_PER_PAGE,
-        24 => 24,
-        48 => 48,
+        self::DEFAULT_PER_PAGE . ' na stránce' => self::DEFAULT_PER_PAGE,
+        '24 na stránce' => 24,
+        '48 na stránce' => 48,
     ];
 
     private static $sortingPropertyMap = [
@@ -66,6 +66,19 @@ class OrganizationFilter
     /** @var array|null */
     private $_filters;
 
+    public function isActive(): bool
+    {
+        return $this->getPage() !== 1
+            || $this->getName() !== null
+            || $this->getDistrict() !== null
+            || $this->getRegion() !== null
+            || $this->getSortBy() !== OrganizationSortByEnum::BY_NAME
+            || $this->getSortOrder() !== SortOrderEnum::ORDER_ASC
+            || $this->getPerPage() !== self::DEFAULT_PER_PAGE
+            || !empty($this->getCategories())
+        ;
+    }
+
     public function create(Request $request, ?Category $category): self
     {
         $filter = new static();
@@ -73,11 +86,11 @@ class OrganizationFilter
         return $filter
             ->setPage($this->extractPage($request))
             ->setPerPage($this->extractPerPage($request))
+            ->setName($this->extractName($request))
             ->setCategories($this->extractCategories($request, $category))
             ->setTypes($this->extractTypes($request))
-            ->setRegions($this->extractRegions($request))
-            ->setDistricts($this->extractDistricts($request))
-            ->setMunicipalities($this->extractMunicipalities($request))
+            ->setRegion($this->extractRegion($request))
+            ->setDistrict($this->extractDistrict($request))
             ->setSortBy($this->extractSortBy($request))
             ->setSortOrder($this->extractSortOrder($request))
         ;
@@ -87,9 +100,9 @@ class OrganizationFilter
     {
         $this->applyCategories($builder);
         $this->applyTypes($builder);
-        $this->applyRegions($builder);
-        $this->applyDistricts($builder);
-        $this->applyMunicipalities($builder);
+        $this->applyRegion($builder);
+        $this->applyDistrict($builder);
+        $this->applyName($builder);
         $this->applySorting($builder);
     }
 
@@ -129,33 +142,35 @@ class OrganizationFilter
         }
     }
 
-    private function applyRegions(QueryBuilder $builder): void
+    private function applyRegion(QueryBuilder $builder): void
     {
-        $regions = $this->getRegions();
-        if ($regions) {
+        $region = $this->getRegion();
+        if ($region) {
             $builder
                 ->join('organization.region', 'region')
-                ->andWhere($builder->expr()->in('region.id', $regions));
+                ->andWhere('region.id = :region')
+                ->setParameter('region', $region);
         }
     }
 
-    private function applyDistricts(QueryBuilder $builder): void
+    private function applyDistrict(QueryBuilder $builder): void
     {
-        $districts = $this->getDistricts();
-        if ($districts) {
+        $district = $this->getDistrict();
+        if ($district) {
             $builder
                 ->join('organization.district', 'district')
-                ->andWhere($builder->expr()->in('district.id', $districts));
+                ->andWhere('district.id = :district')
+                ->setParameter('district', $district);
         }
     }
 
-    private function applyMunicipalities(QueryBuilder $builder): void
+    private function applyName(QueryBuilder $builder): void
     {
-        $municipalities = $this->getMunicipalities();
-        if ($municipalities) {
+        $name = $this->getName();
+        if ($name) {
             $builder
-                ->join('organization.municipality', 'municipality')
-                ->andWhere($builder->expr()->in('municipality.id', $municipalities));
+                ->andWhere('organization.name LIKE :orgName')
+                ->setParameter('orgName', '%' . $name . '%');
         }
     }
 
@@ -209,46 +224,39 @@ class OrganizationFilter
         return $types;
     }
 
-    private function extractRegions(Request $request): array
+    private function extractRegion(Request $request): ?string
     {
         $filters = $this->extractFilters($request);
-        $regions = array_key_exists('regions', $filters) ? (array) $filters['regions'] : [];
+        $region = array_key_exists('region', $filters) ? (string) $filters['region'] : null;
 
         try {
-            Type::checkType($regions, 'string[]');
+            Type::checkType($region, 'string|null');
         } catch (InvalidArgumentTypeException $exception) {
-            $regions = [];
+            $region = null;
         }
 
-        return $regions;
+        return $region;
     }
 
-    private function extractDistricts(Request $request): array
+    private function extractDistrict(Request $request): ?string
     {
         $filters = $this->extractFilters($request);
-        $districts = array_key_exists('districts', $filters) ? (array) $filters['districts'] : [];
+        $district = array_key_exists('district', $filters) ? (string) $filters['district'] : null;
 
         try {
-            Type::checkType($districts, 'string[]');
+            Type::checkType($district, 'string|null');
         } catch (InvalidArgumentTypeException $exception) {
-            $districts = [];
+            $district = null;
         }
 
-        return $districts;
+        return $district;
     }
 
-    private function extractMunicipalities(Request $request): array
+    private function extractName(Request $request): ?string
     {
         $filters = $this->extractFilters($request);
-        $municipalities = array_key_exists('municipalities', $filters) ? (array) $filters['municipalities'] : [];
 
-        try {
-            Type::checkType($municipalities, 'string[]');
-        } catch (InvalidArgumentTypeException $exception) {
-            $municipalities = [];
-        }
-
-        return $municipalities;
+        return array_key_exists('name', $filters) ? (string) $filters['name']: null;
     }
 
     private function extractFilters(Request $request): array
@@ -258,98 +266,6 @@ class OrganizationFilter
         }
 
         return $this->_filters;
-    }
-
-    public function getCategories(): array
-    {
-        return $this->categories;
-    }
-
-    public function setCategories(array $categories): self
-    {
-        $this->categories = $categories;
-
-        return $this;
-    }
-
-    public function getTypes(): array
-    {
-        return $this->types;
-    }
-
-    public function setTypes(array $types): self
-    {
-        $this->types = $types;
-
-        return $this;
-    }
-
-    public function getRegions(): array
-    {
-        return $this->regions;
-    }
-
-    public function setRegions(array $regions): self
-    {
-        $this->regions = $regions;
-
-        return $this;
-    }
-
-    public function getDistricts(): array
-    {
-        return $this->districts;
-    }
-
-    public function setDistricts(array $districts): self
-    {
-        $this->districts = $districts;
-
-        return $this;
-    }
-
-    public function getMunicipalities(): array
-    {
-        return $this->municipalities;
-    }
-
-    public function setMunicipalities(array $municipalities): self
-    {
-        $this->municipalities = $municipalities;
-
-        return $this;
-    }
-
-    public function getPage(): int
-    {
-        return $this->page;
-    }
-
-    public function setPage(int $page): self
-    {
-        if ($page <= 1) {
-            $page = 1;
-        }
-
-        $this->page = $page;
-
-        return $this;
-    }
-
-    public function getPerPage(): int
-    {
-        return $this->perPage;
-    }
-
-    public function setPerPage(int $perPage): self
-    {
-        if ($perPage <= 1) {
-            $perPage = 1;
-        }
-
-        $this->perPage = $perPage;
-
-        return $this;
     }
 
     private function extractSortBy(Request $request): string
@@ -385,6 +301,86 @@ class OrganizationFilter
         return array_key_exists('sort', $filters)
             ? $filters['sort']
             : OrganizationSortByEnum::BY_NAME .'-'. SortOrderEnum::ORDER_ASC;
+    }
+
+    public function getCategories(): array
+    {
+        return $this->categories;
+    }
+
+    public function setCategories(array $categories): self
+    {
+        $this->categories = $categories;
+
+        return $this;
+    }
+
+    public function getTypes(): array
+    {
+        return $this->types;
+    }
+
+    public function setTypes(array $types): self
+    {
+        $this->types = $types;
+
+        return $this;
+    }
+
+    public function getRegion(): ?string
+    {
+        return $this->region;
+    }
+
+    public function setRegion(?string $region): self
+    {
+        $this->region = $region;
+
+        return $this;
+    }
+
+    public function getDistrict(): ?string
+    {
+        return $this->district;
+    }
+
+    public function setDistrict(?string $district): self
+    {
+        $this->district = $district;
+
+        return $this;
+    }
+
+    public function getPage(): int
+    {
+        return $this->page;
+    }
+
+    public function setPage(int $page): self
+    {
+        if ($page <= 1) {
+            $page = 1;
+        }
+
+        $this->page = $page;
+
+        return $this;
+    }
+
+    public function getPerPage(): int
+    {
+        return $this->perPage;
+    }
+
+    public function setPerPage(int $perPage): self
+    {
+        if ($perPage <= 1) {
+            $perPage = 1;
+        }
+
+        $this->perPage = $perPage;
+
+        return $this;
     }
 
     public function getSortBy(): string
@@ -431,6 +427,18 @@ class OrganizationFilter
     public function setSort(string $sort): self
     {
         $this->sort = $sort;
+
+        return $this;
+    }
+
+    public function getName(): ?string
+    {
+        return $this->name;
+    }
+
+    public function setName(?string $name): self
+    {
+        $this->name = $name;
 
         return $this;
     }

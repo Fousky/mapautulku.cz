@@ -30,7 +30,7 @@ class District
     /**
      * @var Region|null
      *
-     * @ORM\ManyToOne(targetEntity="App\Entity\Geo\Region", inversedBy="districts")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Geo\Region", inversedBy="districts", fetch="EAGER")
      * @ORM\JoinColumn(name="region_id", referencedColumnName="region_id")
      */
     protected $region;

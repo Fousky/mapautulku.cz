@@ -4,117 +4,140 @@
 # Put parameters here that don't need to change on each machine where the app is deployed
 # https://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
 parameters:
-    locale: 'cs'
+  locale: 'cs'
+  env(GOOGLE_MAPS_KEY): ''
+  env(RECIPIENTS_ORGANIZATION_ADD): []
 
 services:
-    # default configuration for services in *this* file
-    _defaults:
-        autowire: true      # Automatically injects dependencies in your services.
-        autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
-        public: false       # Allows optimizing the container by removing unused services; this also means
-                            # fetching services directly from the container via $container->get() won't work.
-                            # The best practice is to be explicit about your dependencies anyway.
+  # default configuration for services in *this* file
+  _defaults:
+    autowire: true      # Automatically injects dependencies in your services.
+    autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
+    public: false       # Allows optimizing the container by removing unused services; this also means
+      # fetching services directly from the container via $container->get() won't work.
+    # The best practice is to be explicit about your dependencies anyway.
 
-    # makes classes in src/ available to be used as services
-    # this creates a service per class whose id is the fully-qualified class name
-    App\:
-        resource: '../src/*'
-        exclude: '../src/{DependencyInjection,Entity,Migrations,Tests,Kernel.php}'
+  # makes classes in src/ available to be used as services
+  # this creates a service per class whose id is the fully-qualified class name
+  App\:
+    resource: '../src/*'
+    exclude: '../src/{DependencyInjection,Entity,Migrations,Tests,Kernel.php}'
 
-    # controllers are imported separately to make sure services can be injected
-    # as action arguments even if you don't extend any base controller class
-    App\Controller\:
-        resource: '../src/Controller'
-        tags: ['controller.service_arguments']
+  # controllers are imported separately to make sure services can be injected
+  # as action arguments even if you don't extend any base controller class
+  App\Controller\:
+    resource: '../src/Controller'
+    tags: ['controller.service_arguments']
 
-    Doctrine\ORM\EntityManager: '@Doctrine\ORM\EntityManagerInterface'
+  Doctrine\ORM\EntityManager: '@Doctrine\ORM\EntityManagerInterface'
 
-    App\Admin\Organization\OrganizationAdmin:
-        arguments:
-        - ~
-        - 'App\Entity\Organization\Organization'
-        - ~
-        tags:
-        -
-            name: sonata.admin
-            manager_type: orm
-            group: Organizace
-            label: Organizace
-            icon: '<i class="fa fa-university"></i>'
+  App\Model\Mailer\Recipients:
+    arguments:
+      $organizationAdd: '%env(json:RECIPIENTS_ORGANIZATION_ADD)%'
 
-    App\Admin\Organization\OrganizationHasCategoryAdmin:
-        arguments:
-        - ~
-        - 'App\Entity\Organization\OrganizationHasCategory'
-        - ~
-        tags:
-        -
-            name: sonata.admin
-            manager_type: orm
-            show_in_dashboard: false
+  App\Admin\Organization\OrganizationAdmin:
+    arguments:
+    - ~
+    - 'App\Entity\Organization\Organization'
+    - ~
+    tags:
+    -
+      name: sonata.admin
+      manager_type: orm
+      group: Organizace
+      label: Organizace
+      icon: '<i class="fa fa-university"></i>'
 
-    App\Admin\Organization\CategoryAdmin:
-        arguments:
-        - ~
-        - 'App\Entity\Organization\Category'
-        - ~
-        tags:
-        -
-            name: sonata.admin
-            manager_type: orm
-            group: Organizace
-            label: Kategorie
-            icon: '<i class="fa fa-university"></i>'
+  App\Admin\Organization\OrganizationHasCategoryAdmin:
+    arguments:
+    - ~
+    - 'App\Entity\Organization\OrganizationHasCategory'
+    - ~
+    tags:
+    -
+      name: sonata.admin
+      manager_type: orm
+      show_in_dashboard: false
 
-    App\Admin\User\UserAdmin:
-        arguments:
-        - ~
-        - 'App\Entity\User\User'
-        - ~
-        - '@App\Model\Security\ChangeUserPasswordResolver'
-        tags:
-        -
-            name: sonata.admin
-            manager_type: orm
-            group: Uživatelé
-            label: Uživatelé
-            icon: '<i class="fa fa-users"></i>'
+  App\Admin\Organization\CategoryAdmin:
+    arguments:
+    - ~
+    - 'App\Entity\Organization\Category'
+    - ~
+    tags:
+    -
+      name: sonata.admin
+      manager_type: orm
+      group: Organizace
+      label: Kategorie
+      icon: '<i class="fa fa-university"></i>'
 
-    App\Admin\Geo\RegionAdmin:
-        arguments:
-        - ~
-        - 'App\Entity\Geo\Region'
-        - ~
-        tags:
-        -
-            name: sonata.admin
-            manager_type: orm
-            group: Lokality
-            label: Kraje
-            icon: '<i class="fa fa-globe"></i>'
+  App\Admin\User\UserAdmin:
+    arguments:
+    - ~
+    - 'App\Entity\User\User'
+    - ~
+    - '@App\Model\Security\ChangeUserPasswordResolver'
+    tags:
+    -
+      name: sonata.admin
+      manager_type: orm
+      group: Uživatelé
+      label: Uživatelé
+      icon: '<i class="fa fa-users"></i>'
 
-    App\Admin\Geo\DistrictAdmin:
-        arguments:
-        - ~
-        - 'App\Entity\Geo\District'
-        - ~
-        tags:
-        -
-            name: sonata.admin
-            manager_type: orm
-            group: Lokality
-            label: Okresy
-            icon: '<i class="fa fa-globe"></i>'
+  App\Admin\Geo\RegionAdmin:
+    arguments:
+    - ~
+    - 'App\Entity\Geo\Region'
+    - ~
+    tags:
+    -
+      name: sonata.admin
+      manager_type: orm
+      group: Lokality
+      label: Kraje
+      icon: '<i class="fa fa-globe"></i>'
 
-    App\Admin\Geo\MunicipalityAdmin:
-        arguments:
-        - ~
-        - 'App\Entity\Geo\Municipality'
-        - ~
-        tags:
-        -
-            name: sonata.admin
-            manager_type: orm
-            group: Lokality
-            label: Obce a města
-            icon: '<i class="fa fa-globe"></i>'
+  App\Admin\Geo\DistrictAdmin:
+    arguments:
+    - ~
+    - 'App\Entity\Geo\District'
+    - ~
+    tags:
+    -
+      name: sonata.admin
+      manager_type: orm
+      group: Lokality
+      label: Okresy
+      icon: '<i class="fa fa-globe"></i>'
+
+  App\Admin\Geo\DistrictZipCodeAdmin:
+    arguments:
+    - ~
+    - 'App\Entity\Geo\DistrictZipCode'
+    - ~
+    tags:
+    -
+      name: sonata.admin
+      manager_type: orm
+      group: Lokality
+      label: PSČ
+      icon: '<i class="fa fa-globe"></i>'
+
+  App\Admin\Geo\MunicipalityAdmin:
+    arguments:
+    - ~
+    - 'App\Entity\Geo\Municipality'
+    - ~
+    tags:
+    -
+      name: sonata.admin
+      manager_type: orm
+      group: Lokality
+      label: Obce a města
+      icon: '<i class="fa fa-globe"></i>'
+
+  App\Model\Pagerfanta\AppPaginatorView:
+    tags:
+      - { name: pagerfanta.view, alias: app_paginator }

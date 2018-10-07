@@ -1,5 +1,5 @@
 sonata_admin:
-    title: 'MapaÚtulků.cz'
+    title: 'MapaUtulku.cz'
     dashboard:
         blocks:
             - { type: sonata.admin.block.admin_list, position: left }
@@ -14,8 +14,8 @@ sonata_admin:
         extra_stylesheets:
             - https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css
             - bundles/sonataadmin/vendor/admin-lte/dist/css/skins/skin-purple.min.css
-#        extra_javascripts:
-#            - assets/admin/js/Admin.custom.js
+        extra_javascripts:
+            - assets/admin/js/Admin.custom.js
     options:
         html5_validate:       true
         # Auto order groups and admins by label or id
@@ -33,6 +33,8 @@ sonata_admin:
         lock_protection:      false
         # Enable automatic registration of annotations with JMSDiExtraBundle
         enable_jms_di_extra_autoregistration: true
+    templates:
+        layout: 'admin/standard_layout.html.twig'
 
 sonata_block:
     default_contexts: [cms]

@@ -1,0 +1,128 @@
+{% extends 'frontend/base.html.twig' %}
+
+{% block body %}
+
+    <div id="titlebar" class="gradient">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+
+                    <h2><i class="sl sl-icon-plus"></i> Přidání organizace</h2>
+
+                    <nav id="breadcrumbs">
+                        <ul>
+                            <li><a href="{{ path('_app_homepage') }}">Domů</a></li>
+                            <li><a href="{{ path('_app_organizations_list') }}">Seznam útulků</a></li>
+                            <li>Přidání organizace</li>
+                        </ul>
+                    </nav>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {% form_theme form 'frontend/form/theme.html.twig' %}
+    {{ form_start(form) }}
+    <div class="container margin-bottom-50">
+        <div class="row">
+            <div class="col-lg-12">
+                {% if not skipped %}
+                    <div class="notification warning large">
+                        <h4>Je nám líto, ale organizaci s tímto IČ jsme z databáze ARES nezískali. Zkuste prosím vyplnit informace ručně.</h4>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <a href="{{ path('_app_organization_add') }}" title="Zpět" class="button pull-left">&larr; zpět</a>
+                            </div>
+                        </div>
+                    </div>
+                {% else %}
+                    <div class="row margin-bottom-15">
+                        <div class="col-md-12">
+                            <a href="{{ path('_app_organization_add') }}" title="Zpět" class="button">&larr; zpět</a>
+                        </div>
+                    </div>
+                {% endif %}
+
+                {% if not form.vars.valid %}
+                    <div class="notification error large">
+                        <p>Formulář obsahuje chyby, prosím zkontrolujte je.</p>
+                    </div>
+                {% endif %}
+
+                <div id="add-listing" class="separated-form">
+
+                    <div class="add-listing-section">
+                        <div class="add-listing-headline">
+                            <h3><i class="sl sl-icon-doc"></i> Základní údaje</h3>
+                        </div>
+                        <div class="row with-forms">
+                            <div class="col-md-12">
+                                {{ form_row(form.name, {'label_attr': {'icon_class': 'tip', 'icon_text': 'Jméno organizace podle obchodního rejstříku (www.justice.cz)'}}) }}
+                            </div>
+                        </div>
+                        <div class="row with-forms">
+                            <div class="col-md-6">
+                                {{ form_row(form.crn) }}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="add-listing-section margin-top-45">
+                        <div class="add-listing-headline">
+                            <h3><i class="sl sl-icon-location"></i> Adresa</h3>
+                        </div>
+
+                        <div class="submit-section">
+                            <div class="row with-forms">
+                                <div class="col-md-12">
+                                    {{ form_row(form.address) }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="add-listing-section margin-top-45">
+                        <div class="add-listing-headline">
+                            <h3><i class="sl sl-icon-list"></i> Zvířata, kterým pomáhají</h3>
+                        </div>
+                        <div class="checkboxes checkbox-inline">
+                            {{ form_row(form.hasCategories) }}
+                        </div>
+                    </div>
+
+                    <div class="add-listing-section margin-top-45">
+                        <div class="add-listing-headline">
+                            <h3><i class="sl sl-icon-envolope"></i> Kontaktní údaje</h3>
+                        </div>
+
+                        <div class="row with-forms">
+                            <div class="col-md-6">
+                                {{ form_row(form.phone) }}
+                            </div>
+                            <div class="col-md-6">
+                                {{ form_row(form.email) }}
+                            </div>
+                            <div class="col-md-6">
+                                {{ form_row(form.www) }}
+                            </div>
+                            <div class="col-md-6">
+                                {{ form_row(form.facebook) }}
+                            </div>
+                        </div>
+                    </div>
+
+                    {{ form_widget(form.submit, {'label': 'Přidat'}) }}
+                </div>
+
+                <hr class="margin-top-40" />
+
+                <p class="lead">
+                    Děkujeme, že nám pomáháte rozšiřovat informace o organizacích v ČR, ceníme si každé pomoci.
+                </p>
+            </div>
+        </div>
+    </div>
+    {{ form_end(form) }}
+
+{% endblock %}

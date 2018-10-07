@@ -44,6 +44,12 @@ class Category
 
     /**
      * @var string|null
+     * @ORM\Column(name="icon", type="string", nullable=true)
+     */
+    protected $icon;
+
+    /**
+     * @var string|null
      * @ORM\Column(name="slug", type="string", nullable=false, unique=true)
      *
      * @Gedmo\Slug(fields={"nameInAkuzativ"}, updatable=true, unique=true)
@@ -171,6 +177,18 @@ class Category
     public function setSlug(?string $slug): self
     {
         $this->slug = $slug;
+
+        return $this;
+    }
+
+    public function getIcon(): ?string
+    {
+        return $this->icon;
+    }
+
+    public function setIcon(?string $icon): self
+    {
+        $this->icon = $icon;
 
         return $this;
     }

@@ -16,17 +16,15 @@ class DistrictZipCodeRepository extends EntityRepository
         parent::__construct($em, $em->getClassMetadata(DistrictZipCode::class));
     }
 
-    /**
-     * @param string $zip
-     *
-     * @return DistrictZipCode[]
-     */
-    public function findByZip(string $zip): array
+    public function findByZipAndCityPart(string $zip, string $cityPart): ?DistrictZipCode
     {
         return $this->createQueryBuilder('zip')
             ->where('zip.zipCode LIKE :zip')
+            ->andWhere('zip.cityPart LIKE :cityPart')
             ->setParameter('zip', $zip . '%')
+            ->setParameter('cityPart', $cityPart)
+            ->setMaxResults(1)
             ->getQuery()
-            ->getResult();
+            ->getOneOrNullResult();
     }
 }

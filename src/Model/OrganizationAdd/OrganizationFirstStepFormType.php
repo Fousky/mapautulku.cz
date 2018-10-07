@@ -23,8 +23,12 @@ class OrganizationFirstStepFormType extends AbstractType
                 'label' => 'IČ:',
                 'required' => false,
                 'constraints' => [
-                    new Assert\NotBlank(),
-                    new Crn(),
+                    new Assert\NotBlank([
+                        'groups' => ['first_step'],
+                    ]),
+                    new Crn([
+                        'groups' => ['first_step'],
+                    ]),
                 ],
             ])
             ->add('submit', SubmitType::class)
@@ -36,6 +40,7 @@ class OrganizationFirstStepFormType extends AbstractType
         $resolver
             ->setDefaults([
                 'data_class' => Organization::class,
+                'validation_groups' => ['first_step'],
             ])
         ;
     }

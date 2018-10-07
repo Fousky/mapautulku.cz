@@ -42,4 +42,9 @@ class OrganizationStorage
 
         return $organization;
     }
+
+    public function abandon(): void
+    {
+        $this->session->remove(self::KEY);
+    }
 }

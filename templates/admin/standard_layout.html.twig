@@ -1,0 +1,15 @@
+{% extends '@SonataAdmin/standard_layout.html.twig' %}
+
+{% block sonata_javascript_config %}
+    {{ parent() }}
+    <script>
+        window.GOOGLE_MAPS_KEY = '{{ google_maps_key }}';
+    </script>
+{% endblock %}
+
+{% block body_attributes -%}
+    class="sonata-bc skin-purple fixed
+    {% if app.request.cookies.get('sonata_sidebar_hide') -%}
+        sidebar-collapse
+    {%- endif -%}"
+{%- endblock -%}

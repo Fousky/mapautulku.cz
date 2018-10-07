@@ -39,7 +39,7 @@ class OrganizationSecondStepFormType extends AbstractType
                 'required' => false,
             ])
             ->add('submit', SubmitType::class, [
-                'label' => 'Přidat útulek',
+                'label' => 'Přidat organizaci',
                 'attr' => [
                     'class' => 'button preview',
                 ],

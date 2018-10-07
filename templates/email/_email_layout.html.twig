@@ -1,0 +1,69 @@
+{%- spaceless -%}
+    <!doctype html>
+    <html>
+    <head>
+        <meta name="viewport" content="width=device-width">
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <title>{% block title %}MapaUtulku.cz{% endblock %}</title>
+    </head>
+
+    <body bgcolor="#f6f6f6">
+
+    <img src="{{ absolute_url(asset('assets/images/logo.png')) }}" style="margin-left: auto; margin-right:auto; display: block;" />
+
+    <table style="padding: 20px;width: 100%" bgcolor="#f6f6f6">
+        <tr>
+            <td></td>
+            <td bgcolor="#FFFFFF" style="clear: both!important; display: block!important; margin: 0 auto!important; max-width: 600px!important">
+                <div class="content" style="display: block; margin: 0 auto; max-width: 600px">
+                    <table style="width: 100%; padding: 10px 10px 10px 10px;">
+                        <tr>
+                            <td>
+                                {% block content %}{% endblock %}
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </td>
+            <td></td>
+        </tr>
+    </table>
+
+    <table style="clear: both!important; width: 100%;">
+        <tr>
+            <td></td>
+            <td>
+                <div class="content" style="display: block; margin: 0 auto; max-width: 600px;">
+                    <table style="width: 100%;">
+                        <tr>
+                            <td align="center">
+                                <p style="color: #666;font-size: 12px;font-weight: 400;margin-bottom: 10px;">Myslíte si, že tento e-mail není určen pro Vás? Prosím, <a href="{{ url('_app_info_contact') }}" target="_blank">sdělte nám to</a>.</p>
+                            </td>
+                        </tr>
+                    </table>
+                    <table style="width:100%;">
+                        <tr>
+                            <td align="right" width="50%" style="padding-right:10px;">
+                                <p style="color: #666;font-size: 12px;font-weight: 400;margin-bottom: 10px;">
+                                    <strong>MapaUtulku.cz</strong><br />
+                                </p>
+                            </td>
+                            <td align="left" width="50%" style="padding-left:10px;">
+                                <p style="color: #666;font-size: 12px;font-weight: 400;margin-bottom: 10px;">
+                                    <a href="tel:+420773831431" target="_blank">+420 773 831 431</a><br />
+                                    <a href="mailto:info@fousky.cz" target="_blank">info@mapautulku.cz</a><br />
+                                    <a href="https://www.fousky.cz" target="_blank">https://mapautulku.cz</a><br />
+                                </p>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+
+            </td>
+            <td></td>
+        </tr>
+    </table>
+
+    </body>
+    </html>
+{%- endspaceless -%}

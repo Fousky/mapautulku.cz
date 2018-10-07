@@ -7,8 +7,8 @@ namespace App\Model\Mailer;
  */
 class MailerAdapter
 {
-    private const FROM_NAME = 'MapaÚtulků.cz';
-    private const FROM_EMAIL = 'info@mapa-utulku.cz';
+    private const FROM_NAME = 'MapaUtulku.cz';
+    private const FROM_EMAIL = 'info@mapautulku.cz';
 
     /** @var \Swift_Mailer */
     protected $mailer;

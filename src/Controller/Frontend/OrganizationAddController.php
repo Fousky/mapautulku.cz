@@ -70,11 +70,15 @@ class OrganizationAddController extends AbstractController
     {
         $organization = $this->organizationStorage->getOrCreateNew();
 
+        if ($organization->getCrn() === null) {
+            return $this->redirectToRoute('_app_organization_add');
+        }
+
         $form = $this->createForm(OrganizationSecondStepFormType::class, $organization);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $this->addHandler->handleFirstStep($form);
+            $this->addHandler->handleSecondStep($form);
 
             return $this->redirectToRoute('_app_organization_add_thanks');
         }

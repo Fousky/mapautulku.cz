@@ -13,11 +13,18 @@ use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Ramsey\Uuid\Uuid;
 use Ramsey\Uuid\UuidInterface;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\Organization\OrganizationRepository")
  * @ORM\Table(name="organization")
  * @ORM\HasLifecycleCallbacks()
+ *
+ * @UniqueEntity(
+ *     fields={"crn"},
+ *     groups={"first_step", "full_step"},
+ *     message="Organizaci s tímto IČ již evidujeme a pokud ještě není zveřejněna, usilovně zpracováváme informace. Děkujeme za pochopení."
+ * )
  *
  * @author Lukáš Brzák <lukas.brzak@fousky.cz>
  */
@@ -33,6 +40,18 @@ class Organization
      * @ORM\Column(name="organization_id", type="uuid")
      */
     protected $id;
+
+    /**
+     * @var bool
+     * @ORM\Column(name="is_public", type="boolean", options={"default":"0"})
+     */
+    protected $public = false;
+
+    /**
+     * @var bool
+     * @ORM\Column(name="is_root", type="boolean", options={"default":"1"})
+     */
+    protected $root = true;
 
     /**
      * @var string|null
@@ -147,10 +166,36 @@ class Organization
      */
     protected $foundedAt;
 
+    /**
+     * @var Organization|null
+     * @ORM\ManyToOne(targetEntity="App\Entity\Organization\Organization", inversedBy="subsidiaryOrganizations")
+     * @ORM\JoinColumn(name="parent_id", referencedColumnName="organization_id", onDelete="SET NULL")
+     */
+    protected $parent;
+
+    /**
+     * @var Organization[]|ArrayCollection
+     *
+     * @ORM\OneToMany(
+     *     targetEntity="App\Entity\Organization\Organization",
+     *     mappedBy="parent",
+     *     cascade={"persist"},
+     *     orphanRemoval=true,
+     * )
+     * @ORM\OrderBy({"name" = "ASC"})
+     */
+    protected $subsidiaryOrganizations;
+
     public function __construct()
     {
         $this->id = Uuid::uuid4();
         $this->hasCategories = new ArrayCollection();
+        $this->subsidiaryOrganizations = new ArrayCollection();
+    }
+
+    public function __toString()
+    {
+        return (string) $this->getName();
     }
 
     public function getId(): UuidInterface
@@ -377,6 +422,89 @@ class Organization
     public function setZip(?DistrictZipCode $zip): self
     {
         $this->zip = $zip;
+
+        return $this;
+    }
+
+    public function isPublic(): bool
+    {
+        return $this->public;
+    }
+
+    public function setPublic(bool $public): self
+    {
+        $this->public = $public;
+
+        return $this;
+    }
+
+    public function isRoot(): bool
+    {
+        return $this->root;
+    }
+
+    public function setRoot(bool $root): self
+    {
+        $this->root = $root;
+
+        return $this;
+    }
+
+    public function getParent(): ?Organization
+    {
+        return $this->parent;
+    }
+
+    public function setParent(?Organization $parent): self
+    {
+        $this->parent = $parent;
+
+        if ($parent) {
+            $this->root = false;
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Organization[]|ArrayCollection
+     */
+    public function getSubsidiaryOrganizations()
+    {
+        return $this->subsidiaryOrganizations;
+    }
+
+    public function addSubsidiaryOrganization(Organization $organization): self
+    {
+        if (!$this->subsidiaryOrganizations->contains($organization)) {
+            $this->subsidiaryOrganizations->add($organization);
+            $organization->setParent($this);
+        }
+
+        return $this;
+    }
+
+    public function removeSubsidiaryOrganization(Organization $organization): self
+    {
+        if ($this->subsidiaryOrganizations->contains($organization)) {
+            $this->subsidiaryOrganizations->removeElement($organization);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param Organization[]|ArrayCollection $subsidiaryOrganizations
+     *
+     * @return $this
+     */
+    public function setSubsidiaryOrganizations($subsidiaryOrganizations): self
+    {
+        $this->subsidiaryOrganizations = $subsidiaryOrganizations;
+
+        foreach ($subsidiaryOrganizations as $organization) {
+            $organization->setParent($this);
+        }
 
         return $this;
     }

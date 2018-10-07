@@ -21,6 +21,11 @@ class OrganizationFullStepFormType extends AbstractType
             ->add('name', TextType::class, [
                 'label' => 'Název organizace *:',
                 'required' => true,
+                'constraints' => [
+                    new Assert\NotBlank([
+                        'groups' => ['full_step'],
+                    ]),
+                ],
             ])
             ->add('crn', TextType::class, [
                 'label' => 'IČ:',
@@ -39,6 +44,7 @@ class OrganizationFullStepFormType extends AbstractType
                     new Assert\Count([
                         'min' => 1,
                         'minMessage' => 'Zvolte alespoň 1 kategorii zvířat, které organizace pomáhá',
+                        'groups' => ['full_step'],
                     ]),
                 ],
             ])
@@ -46,6 +52,14 @@ class OrganizationFullStepFormType extends AbstractType
             ->add('email', TextType::class, [
                 'label' => 'E-mail:',
                 'required' => false,
+                'constraints' => [
+                    new Assert\Email([
+                        'checkHost' => true,
+                        'checkMX' => true,
+                        'strict' => true,
+                        'groups' => ['full_step'],
+                    ]),
+                ],
             ])
             ->add('phone', TextType::class, [
                 'label' => 'Telefon:',
@@ -54,14 +68,24 @@ class OrganizationFullStepFormType extends AbstractType
             ->add('www', TextType::class, [
                 'label' => 'Odkaz na internetové stránky:',
                 'required' => false,
+                'constraints' => [
+                    new Assert\Url([
+                        'groups' => ['full_step'],
+                    ]),
+                ],
             ])
             ->add('facebook', TextType::class, [
                 'label' => 'Odkaz na Facebook:',
                 'required' => false,
+                'constraints' => [
+                    new Assert\Url([
+                        'groups' => ['full_step'],
+                    ]),
+                ],
             ])
 
             ->add('submit', SubmitType::class, [
-                'label' => 'Přidat útulek',
+                'label' => 'Přidat organizaci',
                 'attr' => [
                     'class' => 'button preview',
                 ],
@@ -74,6 +98,9 @@ class OrganizationFullStepFormType extends AbstractType
         $resolver
             ->setDefaults([
                 'data_class' => Organization::class,
+                'validation_groups' => [
+                    'full_step',
+                ],
             ])
         ;
     }

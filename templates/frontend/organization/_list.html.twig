@@ -2,55 +2,155 @@
 
 {% block body %}
 
-    <section class="my-4">
+    <div id="titlebar" class="gradient">
         <div class="container">
             <div class="row">
                 <div class="col-md-12">
-                    <h1>Seznam útulků{% if category %} {{ category.nameInAkuzativ }}{% endif %}</h1>
 
-                    <div class="jumbotron">
-                        {% form_theme filterForm 'bootstrap_4_layout.html.twig' %}
-                        {{ form_start(filterForm) }}
-                        <div class="row">
-                            <div class="col-md-4">{{ form_row(filterForm.regions) }}</div>
-                            <div class="col-md-4">{{ form_row(filterForm.districts) }}</div>
-                            <div class="col-md-4">{{ form_row(filterForm.municipalities) }}</div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-4">{{ form_row(filterForm.categories) }}</div>
-                            <div class="col-md-4">{{ form_row(filterForm.perPage) }}</div>
-                            <div class="col-md-4">{{ form_row(filterForm.sort) }}</div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-4">
-                                {{ form_widget(filterForm.submit, {'attr': {'class': 'btn btn-primary btn-block'}}) }}
-                            </div>
-                        </div>
-                        {{ form_end(filterForm) }}
-                    </div>
+                    <h2>Seznam útulků</h2><span>{% if category %} {{ category.nameInAkuzativ }}{% endif %}</span>
 
-                    {% if paginator.count > 0 %}
+                    <nav id="breadcrumbs">
                         <ul>
-                            {% for org in paginator.iterator %}
-                                {# @var org \App\Entity\Organization\Organization #}
-                                <li>{{ org.name }}</li>
-                            {% endfor %}
+                            <li><a href="{{ path('_app_homepage') }}" title="Domů">Domů</a></li>
+                            <li>Seznam útulků</li>
                         </ul>
-                    {% else %}
-                        <div class="alert alert-danger">
-                            <h2>Je nám líto, ale nejsou zde žádné organizace.</h2>
-                            <a href="{{ path('_app_organization_add') }}">Přidat organizaci &rarr;</a>
-                        </div>
-                    {% endif %}
+                    </nav>
 
-                    {% if paginator.haveToPaginate %}
-                        <div class="pagerfanta">
-                            {{ pagerfanta(paginator, 'twitter_bootstrap4') }}
-                        </div>
-                    {% endif %}
                 </div>
             </div>
         </div>
-    </section>
+    </div>
 
+    {{ form_start(filterForm) }}
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="main-search-input gray-style margin-top-0 margin-bottom-0">
+                    <div class="main-search-input-item">
+                        {{ form_widget(filterForm.region, {'attr': {'data-toggle': 'region', 'data-placeholder': 'Kraj', 'class': 'chosen-select'}}) }}
+                    </div>
+
+                    <div class="main-search-input-item">
+                        {{ form_widget(filterForm.district, {'attr': {'data-toggle': 'district', 'data-placeholder': 'Okres', 'class': 'chosen-select'}}) }}
+                    </div>
+
+                    <div class="main-search-input-item">
+                        {{ form_widget(filterForm.name, {'attr': {'placeholder': 'Název organizace'}}) }}
+                    </div>
+
+                    <button class="button">Filtrovat</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-12">
+                <div class="row margin-bottom-25 margin-top-0">
+                    <div class="col-md-6">
+                        {% if filters.active %}
+                            <a href="{{ resetFiltersLink }}" class="button white">zrušit filtry</a>
+                        {% endif %}
+                    </div>
+                    <div class="col-md-6">
+                        <div class="fullwidth-filters">
+                            <div class="sort-by">
+                                <div class="sort-by-select">
+                                    {{ form_widget(filterForm.perPage, {'attr': {'data-placeholder': 'Položek na stránce', 'class': 'chosen-select-no-single'}}) }}
+                                </div>
+                            </div>
+
+                            <div class="sort-by">
+                                <div class="sort-by-select">
+                                    {{ form_widget(filterForm.sort, {'attr': {'data-placeholder': 'Výchozí řazení', 'class': 'chosen-select-no-single'}}) }}
+                                </div>
+                            </div>
+
+                            <div class="panel-dropdown wide float-right">
+                                <a href="#">Kategorie zvířat</a>
+                                <div class="panel-dropdown-content checkboxes">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            {{ form_widget(filterForm.categories) }}
+                                        </div>
+                                    </div>
+                                    <div class="panel-buttons">
+                                        <button type="submit" class="panel-apply">Filtrovat</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {{ form_widget(filterForm._token) }}
+    {{ form_end(filterForm, {'render_rest': false}) }}
+
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="row">
+                    {% if paginator.count > 0 %}
+                        {% for org in paginator.iterator %}
+                            {# @var org \App\Entity\Organization\Organization #}
+                            <div class="col-lg-12 col-md-12">
+                                <div class="listing-item-container list-layout">
+                                    <a href="#" class="listing-item">
+                                        <div class="listing-item-image">
+                                            <img src="{{ asset('assets/images/listing-item-01.jpg') }}" alt="">
+                                            {% for hasCategory in org.hasCategories %}
+                                                <span class="tag">{{ hasCategory.category }}</span>
+                                            {% endfor %}
+                                        </div>
+                                        <div class="listing-item-content">
+                                            {#<div class="listing-badge now-open">Novinka</div>#}
+                                            <div class="listing-item-inner">
+                                                <h3>
+                                                    {{ org.name }}
+                                                    {#<i title="Ověřená organizace" class="verified-icon"></i>#}
+                                                </h3>
+                                                <span>IČ {{ org.crn }}</span><br />
+                                                <span>{{ org.address }}</span>
+                                                {#
+                                                <div class="star-rating" data-rating="3.5">
+                                                    <div class="rating-counter">(12 reviews)</div>
+                                                </div>
+                                                #}
+                                            </div>
+                                            {#<span class="like-icon"></span>#}
+                                        </div>
+                                    </a>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    {% else %}
+                        <div class="notification large error">
+                            <h2>Je nám líto, ale nejsou zde žádné organizace.</h2>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <a class="button" href="{{ path('_app_organization_add') }}">Přidat organizaci &rarr;</a>
+                                </div>
+                            </div>
+                        </div>
+                    {% endif %}
+                </div>
+
+                <div class="clearfix"></div>
+
+                {% if paginator.haveToPaginate %}
+                    <div class="row margin-bottom-40">
+                        <div class="col-md-12">
+                            {{ pagerfanta(paginator, 'app_paginator') }}
+                        </div>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
 {% endblock %}

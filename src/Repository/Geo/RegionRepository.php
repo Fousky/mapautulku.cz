@@ -41,6 +41,8 @@ class RegionRepository extends EntityRepository
         $regions = $this->findBy([], ['title' => 'ASC']);
         $result = [];
 
+        $result['Všechny kraje'] = '';
+
         foreach ($regions as $region) {
             $result[$region->getTitle()] = $region->getId()->toString();
         }

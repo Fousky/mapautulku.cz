@@ -137,3 +137,7 @@ services:
       group: Lokality
       label: Obce a města
       icon: '<i class="fa fa-globe"></i>'
+
+  App\Model\Pagerfanta\AppPaginatorView:
+    tags:
+      - { name: pagerfanta.view, alias: app_paginator }

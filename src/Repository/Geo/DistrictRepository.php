@@ -30,4 +30,19 @@ class DistrictRepository extends EntityRepository
             ->getQuery()
             ->getOneOrNullResult();
     }
+
+    public function createChoices(): array
+    {
+        /** @var District[] $districts */
+        $districts = $this->findBy([], ['title' => 'ASC']);
+        $result = [];
+
+        $result['Všechny okresy'] = null;
+
+        foreach ($districts as $district) {
+            $result[$district->getTitle()] = $district;
+        }
+
+        return $result;
+    }
 }

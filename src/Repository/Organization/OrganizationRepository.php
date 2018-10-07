@@ -10,6 +10,7 @@ use App\Entity\Organization\Organization;
 use App\Model\OrganizationList\OrganizationFilter;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityRepository;
+use Doctrine\ORM\QueryBuilder;
 use Pagerfanta\Adapter\DoctrineORMAdapter;
 use Pagerfanta\Pagerfanta;
 
@@ -27,7 +28,7 @@ class OrganizationRepository extends EntityRepository
         OrganizationFilter $filters
     ): Pagerfanta
     {
-        $builder = $this->createQueryBuilder('organization');
+        $builder = $this->createPublicQueryBuilder('organization');
 
         $filters->apply($builder);
 
@@ -36,6 +37,13 @@ class OrganizationRepository extends EntityRepository
         $paginator->setCurrentPage($filters->getPage());
 
         return $paginator;
+    }
+
+    public function createPublicQueryBuilder(string $alias): QueryBuilder
+    {
+        return $this
+            ->createQueryBuilder($alias)
+            ->where(sprintf('%s.public = 1', $alias));
     }
 
     public function save(Organization $organization): void

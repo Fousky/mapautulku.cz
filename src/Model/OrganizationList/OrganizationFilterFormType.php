@@ -18,8 +18,6 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  */
 class OrganizationFilterFormType extends AbstractType
 {
-    public const NAME = '_f';
-
     /** @var CategoryRepository */
     protected $categoryRepository;
 
@@ -123,10 +121,5 @@ class OrganizationFilterFormType extends AbstractType
                 'data_class' => OrganizationFilter::class,
             ])
         ;
-    }
-
-    public static function getFullName(string $property): string
-    {
-        return sprintf('%s[%s]', self::NAME, $property);
     }
 }

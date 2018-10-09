@@ -56,7 +56,7 @@ class OrganizationListController extends AbstractController
 
         $filterForm = $this
             ->formFactory
-            ->createNamed(OrganizationFilterFormType::NAME, OrganizationFilterFormType::class, $filters)
+            ->createNamed('', OrganizationFilterFormType::class, $filters)
             ->handleRequest($request);
 
         return $this->render('frontend/organization/_list.html.twig', [

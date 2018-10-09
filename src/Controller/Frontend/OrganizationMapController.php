@@ -56,7 +56,7 @@ class OrganizationMapController extends AbstractController
 
         $filterForm = $this
             ->formFactory
-            ->createNamed(OrganizationFilterFormType::NAME, OrganizationFilterFormType::class, $filters)
+            ->createNamed('', OrganizationFilterFormType::class, $filters)
             ->handleRequest($request);
 
         return $this->render('frontend/organization/_list.html.twig', [
@@ -64,7 +64,7 @@ class OrganizationMapController extends AbstractController
             'paginator' => $paginator,
             'filterForm' => $filterForm->createView(),
             'filters' => $filters,
-            'resetFiltersLink' => $this->generateUrl('_app_organizations_map', [
+            'resetFiltersLink' => $this->generateUrl('_app_organizations_list', [
                 'slug' => $slug,
             ]),
         ]);

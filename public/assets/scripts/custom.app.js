@@ -16,6 +16,14 @@ $(document).ready(function () {
             $('[data-toggle="district"] option').prop('disabled', true);
             $('[data-toggle="district"] option[data-region="'+region+'"]').removeAttr('disabled');
             $('[data-toggle="district"] option[value=""]').removeAttr('disabled');
+
+            var actualDistrict = $('[data-toggle="district"] option:selected');
+            if (actualDistrict) {
+                var actualRegion = actualDistrict.data('region');
+                if (typeof actualRegion !== 'undefined' && actualRegion !== region) {
+                    $('[data-toggle="district"]').val('');
+                }
+            }
         } else {
             $('[data-toggle="district"] option').removeAttr('disabled');
         }

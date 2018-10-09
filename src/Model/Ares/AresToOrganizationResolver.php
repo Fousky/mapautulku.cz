@@ -129,7 +129,7 @@ final class AresToOrganizationResolver
         }
 
         $district = $districtTitle ? $this->districtRepository->findByTitle($districtTitle) : null;
-        $municipality = $municipalityTitle ? $this->municipalityRepository->findByTitles($municipalityTitle, $districtTitle) : null;
+        $municipality = $municipalityTitle && $districtTitle ? $this->municipalityRepository->findByTitles($municipalityTitle, $districtTitle) : null;
         $region = $district ? $district->getRegion() : null;
         $zip = $zipTitle && $cityPartTitle ? $this->zipCodeRepository->findByZipAndCityPart($zipTitle, $cityPartTitle) : null;
 

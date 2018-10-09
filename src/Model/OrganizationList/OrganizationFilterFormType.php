@@ -79,15 +79,21 @@ class OrganizationFilterFormType extends AbstractType
                     return $district instanceof District ? $district->getId()->toString() : $district;
                 },
                 'choice_attr' => function ($district, $label) {
-                    if ($district === null || is_string($district)) {
+                    if ($district === null || is_string($district) || !$district instanceof District) {
                         return [];
                     }
 
-                    return [
-                        'data-region' => $district instanceof District && $district->getRegion()
-                            ? $district->getRegion()->getId()->toString()
-                            : null,
-                    ];
+                    if ($district instanceof District) {
+                        $region = $district->getRegion();
+
+                        if ($region) {
+                            return [
+                                'data-region' => $region->getId()->toString(),
+                            ];
+                        }
+                    }
+
+                    return [];
                 },
                 'required' => false,
                 'multiple' => false,

@@ -30,9 +30,6 @@ class OrganizationFilter
     /** @var string[] */
     protected $categories = [];
 
-    /** @var string[] */
-    protected $types = [];
-
     /** @var string|null */
     protected $region;
 
@@ -63,9 +60,6 @@ class OrganizationFilter
         OrganizationSortByEnum::BY_DATE => 'organization.createdAt',
     ];
 
-    /** @var array|null */
-    private $_filters;
-
     public function isActive(): bool
     {
         return $this->getPage() !== 1
@@ -88,7 +82,6 @@ class OrganizationFilter
             ->setPerPage($this->extractPerPage($request))
             ->setName($this->extractName($request))
             ->setCategories($this->extractCategories($request, $category))
-            ->setTypes($this->extractTypes($request))
             ->setRegion($this->extractRegion($request))
             ->setDistrict($this->extractDistrict($request))
             ->setSortBy($this->extractSortBy($request))
@@ -172,21 +165,12 @@ class OrganizationFilter
 
     private function extractPerPage(Request $request): int
     {
-        $filters = $this->extractFilters($request);
-
-        try {
-            $perPage = array_key_exists('perPage', $filters) ? (int) $filters['perPage'] : self::DEFAULT_PER_PAGE;
-        } catch (\Throwable $exception) {
-            $perPage = self::DEFAULT_PER_PAGE;
-        }
-
-        return $perPage;
+        return $request->query->getInt('perPage', self::DEFAULT_PER_PAGE);
     }
 
     private function extractCategories(Request $request, ?Category $category): array
     {
-        $filters = $this->extractFilters($request);
-        $categories = array_key_exists('categories', $filters) ? (array) $filters['categories'] : [];
+        $categories = (array) $request->query->get('categories', []);
 
         try {
             Type::checkType($categories, 'string[]');
@@ -201,24 +185,9 @@ class OrganizationFilter
         return $categories;
     }
 
-    private function extractTypes(Request $request): array
-    {
-        $filters = $this->extractFilters($request);
-        $types = array_key_exists('types', $filters) ? (array) $filters['types'] : [];
-
-        try {
-            Type::checkType($types, 'string[]');
-        } catch (InvalidArgumentTypeException $exception) {
-            $types = [];
-        }
-
-        return $types;
-    }
-
     private function extractRegion(Request $request): ?string
     {
-        $filters = $this->extractFilters($request);
-        $region = array_key_exists('region', $filters) ? (string) $filters['region'] : null;
+        $region = $request->query->get('region');
 
         try {
             Type::checkType($region, 'string|null');
@@ -231,8 +200,7 @@ class OrganizationFilter
 
     private function extractDistrict(Request $request): ?string
     {
-        $filters = $this->extractFilters($request);
-        $district = array_key_exists('district', $filters) ? (string) $filters['district'] : null;
+        $district = $request->query->get('district');
 
         try {
             Type::checkType($district, 'string|null');
@@ -245,18 +213,7 @@ class OrganizationFilter
 
     private function extractName(Request $request): ?string
     {
-        $filters = $this->extractFilters($request);
-
-        return array_key_exists('name', $filters) ? (string) $filters['name']: null;
-    }
-
-    private function extractFilters(Request $request): array
-    {
-        if ($this->_filters === null) {
-            $this->_filters = (array) $request->query->get(OrganizationFilterFormType::NAME, []);
-        }
-
-        return $this->_filters;
+        return $request->query->get('name');
     }
 
     private function extractSortBy(Request $request): string
@@ -287,11 +244,7 @@ class OrganizationFilter
 
     private function extractSort(Request $request): string
     {
-        $filters = $this->extractFilters($request);
-
-        return array_key_exists('sort', $filters)
-            ? $filters['sort']
-            : OrganizationSortByEnum::BY_NAME .'-'. SortOrderEnum::ORDER_ASC;
+        return $request->query->get('sort', OrganizationSortByEnum::BY_NAME .'-'. SortOrderEnum::ORDER_ASC);
     }
 
     public function getCategories(): array
@@ -302,18 +255,6 @@ class OrganizationFilter
     public function setCategories(array $categories): self
     {
         $this->categories = $categories;
-
-        return $this;
-    }
-
-    public function getTypes(): array
-    {
-        return $this->types;
-    }
-
-    public function setTypes(array $types): self
-    {
-        $this->types = $types;
 
         return $this;
     }

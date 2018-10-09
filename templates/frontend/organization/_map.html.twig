@@ -1,0 +1,249 @@
+{% extends 'frontend/base.html.twig' %}
+
+{% set headerFullwidth = true %}
+
+{% block body %}
+    <div class="fs-container">
+        <div class="fs-inner-container content">
+            <div class="fs-content">
+                {{ form_start(filterForm) }}
+                <section class="search">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="row with-forms">
+
+                                <div class="col-fs-4">
+                                    <div class="input-with-icon">
+                                        {{ form_widget(filterForm.region, {'attr': {'data-toggle': 'region', 'data-placeholder': 'Kraj', 'class': 'chosen-select'}}) }}
+                                    </div>
+                                </div>
+
+                                <div class="col-fs-4">
+                                    <div class="input-with-icon">
+                                        {{ form_widget(filterForm.district, {'attr': {'data-toggle': 'district', 'data-placeholder': 'Okres', 'class': 'chosen-select'}}) }}
+                                    </div>
+                                </div>
+
+                                <div class="col-fs-4">
+                                    {{ form_widget(filterForm.name, {'attr': {'placeholder': 'Název organizace'}}) }}
+                                </div>
+                            </div>
+
+                            <div class="row with-forms">
+                                <div class="col-fs-4">
+                                    {% if filters.active %}
+                                        <a href="{{ resetFiltersLink }}" class="button white">zrušit filtry</a>
+                                    {% else %}
+                                        &nbsp;
+                                    {% endif %}
+                                </div>
+
+                                <div class="col-fs-8">
+                                    <div class="fullwidth-filters">
+                                        <div class="sort-by">
+                                            <div class="sort-by-select">
+                                                {{ form_widget(filterForm.perPage, {'attr': {'data-placeholder': 'Položek na stránce', 'class': 'chosen-select-no-single'}}) }}
+                                            </div>
+                                        </div>
+
+                                        <div class="sort-by">
+                                            <div class="sort-by-select">
+                                                {{ form_widget(filterForm.sort, {'attr': {'data-placeholder': 'Výchozí řazení', 'class': 'chosen-select-no-single'}}) }}
+                                            </div>
+                                        </div>
+
+                                        <div class="panel-dropdown wide float-right">
+                                            <a href="#">Kategorie zvířat</a>
+                                            <div class="panel-dropdown-content checkboxes">
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        {{ form_widget(filterForm.categories) }}
+                                                    </div>
+                                                </div>
+                                                <div class="panel-buttons">
+                                                    <button type="submit" class="panel-apply">Filtrovat</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-fs-12 margin-top-10">
+                                    <button class="button">Filtrovat</button>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </section>
+                {{ form_end(filterForm, {'render_rest': false}) }}
+
+                <section class="listings-container margin-top-30">
+                    <div class="row fs-switcher">
+                        <div class="col-md-6">
+                            {% set total = paginator.nbResults %}
+                            <p class="showing-results">
+                                {% if total == 1 %}
+                                    nalezena 1 organizace
+                                {% elseif total > 1 and total < 5 %}
+                                    nalezeny {{ total }} organizace
+                                {% else %}
+                                    nalezeno {{ total }} organizací
+                                {% endif %}
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="row fs-listings">
+                        <div class="col-lg-12 col-md-12">
+                            {% if paginator.count > 0 %}
+                                {% for org in paginator.iterator %}
+                                    {# @var org \App\Entity\Organization\Organization #}
+                                    <div class="listing-item-container list-layout" data-marker-id="{{ loop.index }}">
+                                        <a href="#" class="listing-item">
+
+                                            <div class="listing-item-image">
+                                                <img src="{{ asset('assets/images/listing-item-01.jpg') }}" alt="">
+                                                {% for hasCategory in org.hasCategories %}
+                                                    <span class="tag">{{ hasCategory.category }}</span>
+                                                {% endfor %}
+                                            </div>
+
+                                            <div class="listing-item-content">
+                                                {#<div class="listing-badge now-open">Some tag</div>#}
+
+                                                <div class="listing-item-inner">
+                                                    <h3>
+                                                        {{ org.name }}
+                                                        {#<i title="Ověřená organizace" class="verified-icon"></i>#}
+                                                    </h3>
+                                                    <span>IČ {{ org.crn }}</span><br />
+                                                    <span>{{ org.address }}</span>
+                                                    {#<div class="star-rating" data-rating="3.5">#}
+                                                        {#<div class="rating-counter">(12 reviews)</div>#}
+                                                    {#</div>#}
+                                                </div>
+                                                {#<span class="like-icon"></span>#}
+                                            </div>
+                                        </a>
+                                    </div>
+                                {% endfor %}
+                            {% else %}
+                                <div class="notification large error">
+                                    <h2>Je nám líto, ale nejsou zde žádné organizace.</h2>
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <a class="button" href="{{ path('_app_organization_add') }}">Přidat organizaci &rarr;</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+
+
+                    <div class="row fs-listings">
+                        <div class="col-md-12">
+                            <div class="clearfix"></div>
+                            {% if paginator.haveToPaginate %}
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        {{ pagerfanta(paginator, 'app_paginator') }}
+                                    </div>
+                                </div>
+                                <div class="clearfix"></div>
+                            {% endif %}
+
+                            <div class="copyrights margin-top-0">
+                                {# TODO: footer! #}
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </div>
+
+        <div class="fs-inner-container map-fixed">
+            <div id="map-container">
+                <div id="map" data-map-zoom="8" data-map-scroll="true">
+                    <!-- map goes here -->
+                </div>
+            </div>
+
+        </div>
+    </div>
+{% endblock %}
+
+{% block footer %}{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+
+    <script type="text/javascript" src="https://maps.google.com/maps/api/js?key={{ google_maps_key }}"></script>
+    <script type="text/javascript" src="{{ asset('assets/scripts/vendor/infobox.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('assets/scripts/vendor/markerclusterer.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('assets/scripts/vendor/maps.js') }}"></script>
+
+    <script>
+        var locations = [
+            {#
+            [ locationData(
+                locationURL,
+                locationImg,
+                locationTitle,
+                locationAddress,
+                locationRating,
+                locationRatingCounter'),
+                LocationLatitude,
+                LocationLongitude,
+                1,
+                '<i class="im im-icon"></i>'
+            ],
+            #}
+            {%- for org in paginator.iterator -%}
+            {# @var org \App\Entity\Organization\Organization #}
+                [
+                    locationData(
+                        '#',
+                        '{{ asset('assets/images/review-image-01.jpg') }}',
+                        "{{ org.name }}",
+                        '{{ org.address }}',
+                        0,
+                        0
+                    ),
+                    {% if org.gps %}{{ org.gps.latitude }}{% else %}0{% endif %},
+                    {% if org.gps %}{{ org.gps.longitude }}{% else %}0{% endif %},
+                    {{ loop.index }},
+                    '<i class="im im-icon-Map-Marker2"></i>'
+                ],
+            {%- endfor -%}
+        ];
+
+        function locationData(
+            locationURL,
+            locationImg,
+            locationTitle,
+            locationAddress,
+            locationRating,
+            locationRatingCounter
+        ) {
+            return(''+
+                '<a href="'+ locationURL +'" class="listing-img-container">'+
+                '<div class="infoBox-close"><i class="fa fa-times"></i></div>'+
+                '<img src="'+locationImg+'" alt="">'+
+
+                '<div class="listing-item-content">'+
+                '<h3>'+locationTitle+'</h3>'+
+                '<span>'+locationAddress+'</span>'+
+                '</div>'+
+
+                '</a>'+
+
+                '<div class="listing-content">'+
+                '<div class="listing-title">'+
+                '<div class="xx" data-rating="'+locationRating+'"><div class="rating-counter">('+locationRatingCounter+' reviews)</div></div>'+
+                '</div>'+
+                '</div>')
+        }
+    </script>
+{% endblock %}

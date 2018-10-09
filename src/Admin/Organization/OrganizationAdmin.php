@@ -124,6 +124,7 @@ class OrganizationAdmin extends AbstractAdmin
                     'label' => false,
                     'required' => false,
                     'gps_button' => true,
+                    'by_reference' => false,
                 ])
             ->end()
 

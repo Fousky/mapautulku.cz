@@ -66,7 +66,7 @@ class OrganizationMapController extends AbstractController
             'filters' => $filters,
             'resetFiltersLink' => $this->generateUrl('_app_organizations_map', [
                 'slug' => $slug,
-            ])
+            ]),
         ]);
     }
 }

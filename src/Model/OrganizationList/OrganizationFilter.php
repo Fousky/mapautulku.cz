@@ -99,7 +99,6 @@ class OrganizationFilter
     public function apply(QueryBuilder $builder): void
     {
         $this->applyCategories($builder);
-        $this->applyTypes($builder);
         $this->applyRegion($builder);
         $this->applyDistrict($builder);
         $this->applyName($builder);
@@ -126,19 +125,11 @@ class OrganizationFilter
     private function applyCategories(QueryBuilder $builder): void
     {
         $categories = $this->getCategories();
-        if ($categories) {
+        if (!empty($categories)) {
             $builder
                 ->join('organization.hasCategories', 'hasCategories')
                 ->join('hasCategories.category', 'category')
                 ->where($builder->expr()->in('category.slug', $categories));
-        }
-    }
-
-    private function applyTypes(QueryBuilder $builder): void
-    {
-        $types = $this->getTypes();
-        if ($types) {
-            // todo: resolve types.
         }
     }
 

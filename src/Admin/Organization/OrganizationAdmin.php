@@ -59,28 +59,24 @@ class OrganizationAdmin extends AbstractAdmin
                         ],
                     ],
                     'callback' => function (OrganizationAdmin $admin, $property, $value) {
-                        $request = $admin->getRequest();
-                        $exceptId = $request ? $request->get('except') : null;
+                        $exceptId = $admin->getRequest()->get('except');
 
-                        $datagrid = $admin->getDatagrid();
-                        if ($datagrid) {
-                            /** @var ProxyQuery $proxy */
-                            $proxy = $datagrid->getQuery();
+                        /** @var ProxyQuery $proxy */
+                        $proxy = $admin->getDatagrid()->getQuery();
 
-                            /** @var QueryBuilder $builder */
-                            $builder = $proxy->getQueryBuilder();
-                            $alias = $builder->getAllAliases()[0];
+                        /** @var QueryBuilder $builder */
+                        $builder = $proxy->getQueryBuilder();
+                        $alias = $builder->getAllAliases()[0];
 
-                            $builder
-                                // disallow current org.
-                                ->andWhere($alias . '.id != :id')
-                                // disallow already linked to this parent org.
-                                ->leftJoin($alias . '.parent', 'parent')
-                                ->andWhere('(parent.id IS NULL OR parent.id != :parent)')
-                                ->setParameter('id', $exceptId)
-                                ->setParameter('parent', $exceptId)
-                            ;
-                        }
+                        $builder
+                            // disallow current org.
+                            ->andWhere($alias . '.id != :id')
+                            // disallow already linked to this parent org.
+                            ->leftJoin($alias . '.parent', 'parent')
+                            ->andWhere('(parent.id IS NULL OR parent.id != :parent)')
+                            ->setParameter('id', $exceptId)
+                            ->setParameter('parent', $exceptId)
+                        ;
                     },
                 ])
             ->end()

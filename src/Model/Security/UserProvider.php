@@ -43,6 +43,13 @@ class UserProvider implements UserProviderInterface
             ));
         }
 
+        if ($user->getEmail() === null) {
+            throw new \RuntimeException(sprintf(
+                'User %s has no email!',
+                $user->getId()->toString()
+            ));
+        }
+
         return $this->loadUserByUsername($user->getEmail());
     }
 

@@ -26,7 +26,7 @@ class CrnValidator extends ConstraintValidator
 
     public function isValidCrn(string $crn): bool
     {
-        $crn = preg_replace('/\s+/', '', $crn);
+        $crn = (string) preg_replace('/\s+/', '', $crn);
 
         if (!preg_match('/^\d{8}$/', $crn)) {
             return false;

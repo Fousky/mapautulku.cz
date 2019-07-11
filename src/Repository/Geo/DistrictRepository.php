@@ -6,9 +6,6 @@ use App\Entity\Geo\District;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityRepository;
 
-/**
- * @author Lukáš Brzák <lukas.brzak@fousky.cz>
- */
 class DistrictRepository extends EntityRepository
 {
     public function __construct(EntityManager $em)

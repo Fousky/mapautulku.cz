@@ -12,8 +12,6 @@ use Ramsey\Uuid\UuidInterface;
  *
  * @ORM\Entity(repositoryClass="App\Repository\Geo\RegionRepository")
  * @ORM\Table(name="geo_region")
- *
- * @author Lukáš Brzák <lukas.brzak@fousky.cz>
  */
 class Region
 {

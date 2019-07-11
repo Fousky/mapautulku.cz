@@ -2,9 +2,6 @@
 
 namespace App\Model\Mailer;
 
-/**
- * @author Lukáš Brzák <lukas.brzak@fousky.cz>
- */
 class MailerAdapter
 {
     private const FROM_NAME = 'MapaUtulku.cz';

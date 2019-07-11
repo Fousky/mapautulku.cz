@@ -10,9 +10,6 @@ use Symfony\Component\Security\Core\Encoder\EncoderFactoryInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
-/**
- * @author Lukáš Brzák <lukas.brzak@aquadigital.cz>
- */
 class CreateAdministratorFacade
 {
     /** @var EncoderFactoryInterface */

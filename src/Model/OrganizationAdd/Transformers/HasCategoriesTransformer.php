@@ -7,9 +7,6 @@ use App\Repository\Category\CategoryRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Form\DataTransformerInterface;
 
-/**
- * @author Lukáš Brzák <lukas.brzak@fousky.cz>
- */
 class HasCategoriesTransformer implements DataTransformerInterface
 {
     /** @var CategoryRepository */

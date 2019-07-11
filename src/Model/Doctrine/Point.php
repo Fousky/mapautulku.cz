@@ -4,8 +4,6 @@ namespace App\Model\Doctrine;
 
 /**
  * Class representing binary (GPS) POINT SQL datatype.
- *
- * @author Lukáš Brzák <lukas.brzak@fousky.cz>
  */
 class Point
 {

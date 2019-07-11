@@ -8,9 +8,6 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
-/**
- * @author Lukáš Brzák <lukas.brzak@aquadigital.cz>
- */
 class CreateAdminCommand extends ContainerAwareCommand
 {
     /** @var CreateAdministratorFacade */

@@ -6,8 +6,6 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\HasLifecycleCallbacks()
- *
- * @author Lukáš Brzák <lukas.brzak@fousky.cz>
  */
 trait TimestampableTrait
 {

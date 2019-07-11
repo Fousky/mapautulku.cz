@@ -5,9 +5,6 @@ namespace App\Model\Doctrine;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\DBAL\Types\Type;
 
-/**
- * @author Lukáš Brzák <lukas.brzak@fousky.cz>
- */
 class PointType extends Type
 {
     public function getName(): string

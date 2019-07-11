@@ -5,9 +5,6 @@ namespace App\Model\Ares;
 use GuzzleHttp\Client;
 use Psr\Http\Message\ResponseInterface;
 
-/**
- * @author Lukáš Brzák <lukas.brzak@fousky.cz>
- */
 final class AresClient
 {
     /** @var Client */

@@ -7,9 +7,6 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-/**
- * @author Lukáš Brzák <lukas.brzak@aquadigital.cz>
- */
 class HomepageController extends Controller
 {
     /** @var CategoryRepository */

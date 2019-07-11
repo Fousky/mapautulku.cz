@@ -7,9 +7,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-/**
- * @author Lukáš Brzák <lukas.brzak@fousky.cz>
- */
 class InformationController extends AbstractController
 {
     /**

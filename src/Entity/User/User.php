@@ -24,8 +24,6 @@ use Symfony\Component\Security\Core\User\UserInterface;
  *     },
  * )
  * @ORM\HasLifecycleCallbacks()
- *
- * @author Lukáš Brzák <lukas.brzak@fousky.cz>
  */
 class User implements UserInterface
 {

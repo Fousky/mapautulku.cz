@@ -9,9 +9,6 @@ use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Form\Type\ModelAutocompleteType;
 use Sonata\DoctrineORMAdminBundle\Filter\ModelAutocompleteFilter;
 
-/**
- * @author Lukáš Brzák <lukas.brzak@fousky.cz>
- */
 class DistrictZipCodeAdmin extends AbstractAdmin
 {
     protected $baseRouteName = '_admin_geo_district_zip_code';

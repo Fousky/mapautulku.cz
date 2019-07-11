@@ -5,9 +5,6 @@ namespace App\Model\Security;
 use App\Entity\User\User;
 use Symfony\Component\Security\Core\Encoder\EncoderFactoryInterface;
 
-/**
- * @author Lukáš Brzák <lukas.brzak@fousky.cz>
- */
 class ChangeUserPasswordResolver
 {
     /** @var EncoderFactoryInterface */

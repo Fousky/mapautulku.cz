@@ -4,9 +4,6 @@ namespace App\Model\DoctrineTraits;
 
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * @author Lukáš Brzák <lukas.brzak@aquadigital.cz>
- */
 trait DefaultEnabledTrait
 {
     /**

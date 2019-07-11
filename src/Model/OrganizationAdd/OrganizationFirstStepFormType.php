@@ -11,9 +11,6 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints as Assert;
 
-/**
- * @author Lukáš Brzák <lukas.brzak@fousky.cz>
- */
 class OrganizationFirstStepFormType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void

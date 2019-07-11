@@ -2,9 +2,6 @@
 
 namespace App\Model\Enum;
 
-/**
- * @author Lukáš Brzák <lukas.brzak@fousky.cz>
- */
 final class RolesForUserEnum
 {
     public const ROLE_USER = 'ROLE_USER';

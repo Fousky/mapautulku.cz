@@ -9,9 +9,6 @@ use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\User\UserProviderInterface;
 
-/**
- * @author Lukáš Brzák <lukas.brzak@fousky.cz>
- */
 class UserProvider implements UserProviderInterface
 {
     /** @var UserRepository */

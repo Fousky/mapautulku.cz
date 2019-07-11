@@ -8,9 +8,6 @@ use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Form\Type\ModelAutocompleteType;
 
-/**
- * @author Lukáš Brzák <lukas.brzak@fousky.cz>
- */
 class DistrictAdmin extends AbstractAdmin
 {
     protected $baseRouteName = '_admin_geo_district';

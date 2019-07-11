@@ -7,9 +7,6 @@ use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
 
-/**
- * @author Lukáš Brzák <lukas.brzak@fousky.cz>
- */
 class CategoryAdmin extends AbstractAdmin
 {
     protected $baseRouteName = '_admin_category';

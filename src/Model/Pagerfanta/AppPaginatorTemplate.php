@@ -4,9 +4,6 @@ namespace App\Model\Pagerfanta;
 
 use Pagerfanta\View\Template\Template;
 
-/**
- * @author Lukáš Brzák <lukas.brzak@fousky.cz>
- */
 class AppPaginatorTemplate extends Template
 {
     public function container(): string

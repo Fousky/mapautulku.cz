@@ -11,9 +11,6 @@ use Consistence\Type\Type;
 use Doctrine\ORM\QueryBuilder;
 use Symfony\Component\HttpFoundation\Request;
 
-/**
- * @author Lukáš Brzák <lukas.brzak@fousky.cz>
- */
 class OrganizationFilter
 {
     public const DEFAULT_PER_PAGE = 6;

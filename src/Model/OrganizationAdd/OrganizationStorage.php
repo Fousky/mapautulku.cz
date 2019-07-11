@@ -5,9 +5,6 @@ namespace App\Model\OrganizationAdd;
 use App\Entity\Organization\Organization;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
-/**
- * @author Lukáš Brzák <lukas.brzak@fousky.cz>
- */
 class OrganizationStorage
 {
     private const KEY = '_app/org';

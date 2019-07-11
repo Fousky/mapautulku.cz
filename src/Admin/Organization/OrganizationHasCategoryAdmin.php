@@ -9,9 +9,6 @@ use Sonata\AdminBundle\Form\FormMapper;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Validator\Constraints\NotBlank;
 
-/**
- * @author Lukáš Brzák <lukas.brzak@fousky.cz>
- */
 class OrganizationHasCategoryAdmin extends AbstractAdmin
 {
     protected $baseRouteName = '_admin_organization_has_category';

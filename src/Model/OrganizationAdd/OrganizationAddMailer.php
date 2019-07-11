@@ -6,9 +6,6 @@ use App\Entity\Organization\Organization;
 use App\Model\Mailer\MailerAdapter;
 use App\Model\Mailer\Recipients;
 
-/**
- * @author Lukáš Brzák <lukas.brzak@fousky.cz>
- */
 class OrganizationAddMailer
 {
     /** @var MailerAdapter */

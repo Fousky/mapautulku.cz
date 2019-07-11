@@ -4,9 +4,6 @@ namespace App\Model\Pagerfanta;
 
 use Pagerfanta\View\DefaultView;
 
-/**
- * @author Lukáš Brzák <lukas.brzak@fousky.cz>
- */
 class AppPaginatorView extends DefaultView
 {
     protected function createDefaultTemplate()

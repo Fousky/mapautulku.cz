@@ -15,9 +15,6 @@ use Sonata\CoreBundle\Form\Type\CollectionType;
 use Sonata\DoctrineORMAdminBundle\Datagrid\ProxyQuery;
 use Sonata\DoctrineORMAdminBundle\Filter\ModelAutocompleteFilter;
 
-/**
- * @author Lukáš Brzák <lukas.brzak@fousky.cz>
- */
 class OrganizationAdmin extends AbstractAdmin
 {
     protected $baseRouteName = '_admin_organization';

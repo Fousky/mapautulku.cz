@@ -10,8 +10,6 @@ use Ramsey\Uuid\UuidInterface;
 /**
  * @ORM\Entity()
  * @ORM\Table(name="organization_has_category")
- *
- * @author Lukáš Brzák <lukas.brzak@fousky.cz>
  */
 class OrganizationHasCategory
 {

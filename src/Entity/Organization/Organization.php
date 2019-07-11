@@ -25,8 +25,6 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
  *     groups={"first_step", "full_step"},
  *     message="Organizaci s tímto IČ již evidujeme a pokud ještě není zveřejněna, usilovně zpracováváme informace. Děkujeme za pochopení."
  * )
- *
- * @author Lukáš Brzák <lukas.brzak@fousky.cz>
  */
 class Organization
 {

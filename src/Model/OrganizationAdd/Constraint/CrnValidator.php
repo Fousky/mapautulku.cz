@@ -5,9 +5,6 @@ namespace App\Model\OrganizationAdd\Constraint;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
 
-/**
- * @author Lukáš Brzák <lukas.brzak@fousky.cz>
- */
 class CrnValidator extends ConstraintValidator
 {
     public function validate($value, Constraint $constraint): void

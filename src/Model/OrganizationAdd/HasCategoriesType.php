@@ -9,9 +9,6 @@ use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-/**
- * @author Lukáš Brzák <lukas.brzak@fousky.cz>
- */
 class HasCategoriesType extends AbstractType
 {
     /** @var CategoryRepository */

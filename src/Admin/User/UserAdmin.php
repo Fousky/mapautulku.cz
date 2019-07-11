@@ -13,9 +13,6 @@ use Sonata\DoctrineORMAdminBundle\Datagrid\ProxyQuery;
 use Symfony\Component\Form\Extension\Core\Type;
 use Symfony\Component\Validator\Constraints as Assert;
 
-/**
- * @author Lukáš Brzák <lukas.brzak@fousky.cz>
- */
 class UserAdmin extends AbstractAdmin
 {
     protected $baseRouteName = '_admin_user';

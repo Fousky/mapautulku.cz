@@ -14,9 +14,6 @@ use Doctrine\ORM\QueryBuilder;
 use Pagerfanta\Adapter\DoctrineORMAdapter;
 use Pagerfanta\Pagerfanta;
 
-/**
- * @author Lukáš Brzák <lukas.brzak@fousky.cz>
- */
 class OrganizationRepository extends EntityRepository
 {
     public function __construct(EntityManager $em)

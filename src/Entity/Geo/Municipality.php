@@ -11,8 +11,6 @@ use Ramsey\Uuid\UuidInterface;
  *
  * @ORM\Entity(repositoryClass="App\Repository\Geo\MunicipalityRepository")
  * @ORM\Table(name="geo_municipality")
- *
- * @author Lukáš Brzák <lukas.brzak@fousky.cz>
  */
 class Municipality
 {

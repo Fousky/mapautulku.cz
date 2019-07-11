@@ -8,9 +8,6 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 
-/**
- * @author Lukáš Brzák <lukas.brzak@aquadigital.cz>
- */
 class AdminSecurityController extends Controller
 {
     /** @var AuthenticationUtils */

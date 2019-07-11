@@ -12,8 +12,6 @@ use Symfony\Component\Validator\Constraints as Assert;
 /**
  * @ORM\Entity(repositoryClass="App\Repository\Category\CategoryRepository")
  * @ORM\Table(name="category")
- *
- * @author Lukáš Brzák <lukas.brzak@fousky.cz>
  */
 class Category
 {

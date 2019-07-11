@@ -8,9 +8,6 @@ use App\Model\Ares\AresToOrganizationResolver;
 use App\Repository\Organization\OrganizationRepository;
 use Symfony\Component\Form\FormInterface;
 
-/**
- * @author Lukáš Brzák <lukas.brzak@fousky.cz>
- */
 class OrganizationAddHandler
 {
     /** @var AresClient */

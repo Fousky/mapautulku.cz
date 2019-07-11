@@ -9,9 +9,6 @@ use App\Repository\Geo\MunicipalityRepository;
 use Psr\Http\Message\ResponseInterface;
 use Symfony\Component\DomCrawler\Crawler;
 
-/**
- * @author Lukáš Brzák <lukas.brzak@fousky.cz>
- */
 final class AresToOrganizationResolver
 {
     /** @var DistrictRepository */

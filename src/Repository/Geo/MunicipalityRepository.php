@@ -6,9 +6,6 @@ use App\Entity\Geo\Municipality;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityRepository;
 
-/**
- * @author Lukáš Brzák <lukas.brzak@fousky.cz>
- */
 class MunicipalityRepository extends EntityRepository
 {
     public function __construct(EntityManager $em)
